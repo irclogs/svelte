@@ -1,0 +1,15 @@
+dist: xenial
+language: node_js
+node_js: 10
+
+before_deploy:
+  - yarn build
+
+deploy:
+  skip_cleanup: true
+  local-dir: dist/
+  provider: pages
+  keep-history: true
+  github-token: $GITHUB_TOKEN  # Set in the settings page of your repository, as a secure variable
+  on:
+    branch: master
