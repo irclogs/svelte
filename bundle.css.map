@@ -5,8 +5,8 @@
     "../src/App.svelte"
   ],
   "sourcesContent": [
-    "<script>\n  import { onMount } from 'svelte';\n  const url = new URL('https://irc.softver.org.mk/ddoc/_view/channel');\n  const params = new URLSearchParams({update_seq:true, reduce:true, group_level:1});\n\n  const headers = {'accept': 'application/json'};\n  let channels = [];\n  onMount(async () => {\n    const res = await fetch(url + '?' + params, {mode: \"cors\", headers:headers});\n    channels = (await res.json()).rows;\n  })\n</script>\n\n<style>\n  ul { list-style-type: square; padding-left: 2em; margin: 1em 0px; }\n</style>\n\n<h1>IRC logs with realtime updates</h1>\n\n<ul>\n\t{#each channels as channel}\n    <li>{channel.key[0]}</li>\n\t{:else}\n\t\t<p>loading...</p>\n\t{/each}\n</ul>\n"
+    "<script>\n  import { onMount } from 'svelte';\n  const url = new URL('https://irc.softver.org.mk/ddoc/_view/channel');\n  const params = new URLSearchParams({update_seq:true, reduce:true, group_level:1});\n\n  const headers = {'accept': 'application/json'};\n  let channels = [];\n  onMount(async () => {\n    const res = await fetch(url + '?' + params, {mode: \"cors\", headers:headers});\n    channels = (await res.json()).rows;\n    $: document.title = \"irclog\";\n  })\n</script>\n\n<style>\n  ul { list-style-type: square; padding-left: 2em; margin: 1em 0px; }\n</style>\n\n<h1>IRC logs with realtime updates</h1>\n\n<ul>\n\t{#each channels as channel}\n    <li>{channel.key[0]}</li>\n\t{:else}\n\t\t<p>loading...</p>\n\t{/each}\n</ul>\n"
   ],
   "names": [],
-  "mappings": "AAcE,EAAE,cAAC,CAAC,AAAC,eAAe,CAAE,MAAM,CAAE,YAAY,CAAE,GAAG,CAAE,MAAM,CAAE,GAAG,CAAC,GAAG,AAAE,CAAC"
+  "mappings": "AAeE,EAAE,cAAC,CAAC,AAAC,eAAe,CAAE,MAAM,CAAE,YAAY,CAAE,GAAG,CAAE,MAAM,CAAE,GAAG,CAAC,GAAG,AAAE,CAAC"
 }
