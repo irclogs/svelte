@@ -1,4 +1,5 @@
 <script>
+  import PageLoader from './PageLoader.svelte';
   import { getChannelList } from './couch.js';
   document.title = "irclog";
 </script>
@@ -29,7 +30,7 @@ the database at https://irc.softver.org.mk/api freely.
 </p>
 
 {#await getChannelList()}
-	<p>loading…</p>
+  <PageLoader/>
 {:then channelList}
     <p>The following channels are currently logged:</p>
     <ul>

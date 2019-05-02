@@ -1,4 +1,5 @@
 <script>
+  import PageLoader from './PageLoader.svelte';
   import {colorize} from './colorize.js' ;
   import {getLast100} from './couch.js';
 
@@ -39,8 +40,8 @@
     border-top: 1px dashed #a0a0a0;
   }
   a {
-  	color: rgb(128, 128, 128);
-	  text-decoration: none;
+    color: rgb(128, 128, 128);
+    text-decoration: none;
   }
 </style>
 
@@ -49,7 +50,7 @@
 </header>
 
 {#await response}
-	<p>loading…</p>
+  <PageLoader/>
 {:then data}
 <div style="text-align: center;"><button>back</button></div>
 <table>
