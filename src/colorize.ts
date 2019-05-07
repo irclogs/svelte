@@ -1,6 +1,6 @@
 // https://en.wikipedia.org/wiki/Jenkins_hash_function
 
-export function one_at_a_time_hash(s) {
+export function one_at_a_time_hash(s: string): number {
   let hash = 0;
   for (let i = 0; i < s.length; i++) {
     hash += s.charCodeAt(i);
@@ -13,12 +13,12 @@ export function one_at_a_time_hash(s) {
   return hash;
 }
 
-export function toCssColor(hash) {
+export function toCssColor(hash: number): string {
   let hue = hash % 360;
   return `hsl(${hue}, 50%, 70%)`;
 }
 
-export function colorize(nickname) {
+export function colorize(nickname: string): string {
   const color = toCssColor(one_at_a_time_hash(nickname));
   return `background-color: ${color};`;
 }
