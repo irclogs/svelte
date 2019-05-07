@@ -1,4 +1,5 @@
 <script>
+  import { version } from '../package.json';
   let online;
 </script>
 
@@ -11,6 +12,7 @@
     left: 0;
     background-color: #efefef;
     border-top: 1px dashed #aaaaaa;
+    color: #555555;
   }
   footer a {
     text-decoration: none;
@@ -23,6 +25,6 @@
 
 <svelte:window bind:online={online}/>
 <footer class={online ? '':'red'}>
-  <a href="https://irc.softver.org.mk/">irclog home page</a>
+  <a href="https://irc.softver.org.mk/">irclog home page</a> | ver: {version}
 </footer>
 
