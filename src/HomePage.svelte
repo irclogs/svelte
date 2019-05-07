@@ -1,6 +1,6 @@
 <script>
-  import PageLoader from './PageLoader.svelte';
-  import { getChannelList } from './couch.js';
+  import PageLoader from './spinners/PageLoader.svelte';
+  import { getChannelList } from './couch';
   document.title = "irclog";
 </script>
 
@@ -30,14 +30,15 @@ the database at https://irc.softver.org.mk/api freely.
 </p>
 
 {#await getChannelList()}
-  <PageLoader/>
+    <PageLoader/>
 {:then channelList}
     <p>The following channels are currently logged:</p>
     <ul>
         {#each channelList as channel}
-            <li><a href="#/{channel}">{channel}</a></li>
+            <li><a href="#/{channel.name}" title="total messages: {channel.total_messages}">{channel.name}</a></li>
         {/each}
     </ul>
+    <p>If you want your irc channel on freenode logged, contact 'damjan' on #lugola.</p>
 {:catch error}
-	<p>Something went wrong: {error.message}</p>
+    <p>Something went wrong: {error.message}</p>
 {/await}
