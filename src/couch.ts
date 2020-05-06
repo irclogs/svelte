@@ -23,13 +23,13 @@ export async function getLast100(channel: string, from, to): Promise<any> {
   };
   const response = await fetch(url, {
     ...options,
-    body: JSON.stringify({ queries: [query] })
+    body: JSON.stringify(query)
   });
   if(!response.ok) {
     throw new Error(`Network response was not ok: ${response.statusText}`);
   }
   const data = await response.json(); // validation needed here
-  return data.results[0];
+  return data;
 }
 
 
@@ -44,14 +44,13 @@ export async function getChannelList(): Promise<IChannel[]> {
   };
   const response = await fetch(url, {
     ...options,
-    body: JSON.stringify({ queries: [query] })
+    body: JSON.stringify(query)
   });
   if(!response.ok) {
     throw new Error(`Network response was not ok: ${response.statusText}`);
   }
   const data = await response.json(); // validation needed here
-  const rows  = data.results[0].rows;
-  return rows.map(row => ({name: row.key[0], total_messages: row.value}));
+  return data.rows.map(row => ({name: row.key[0], total_messages: row.value}));
 }
 
 
