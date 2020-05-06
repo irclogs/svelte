@@ -1,10 +1,10 @@
 <script>
-  import PageLoader from './PageLoader.svelte';
+  import PageLoader from './spinners/PageLoader.svelte';
   import {colorize} from './colorize.js' ;
   import {getLast100} from './couch.js';
 
-  export let name;
-  document.title = `irc logs for #${name}`;
+  export let params = {}
+  document.title = `irc logs for #${params.channel}`;
 
   const addDateAndTime = doc => {
       let t = new Date(doc.timestamp * 1000);
@@ -19,7 +19,7 @@
       acc.get(doc.date).push(doc);
       return acc;
   };
-  let response = getLast100(name)
+  let response = getLast100(params.channel)
     .then(result =>
         result.rows
             .reverse()
@@ -46,7 +46,7 @@
 </style>
 
 <header>
-<h1>irc logs for #{name}</h1>
+<h1>irc logs for #{params.channel}</h1>
 </header>
 
 {#await response}
@@ -58,7 +58,7 @@
 <tbody>
   <tr>
     <th colspan="2" align="right">
-      <a href="#/lugola/2019-04-21T00:00:00" id={group}>{group}</a>
+      <a href="#/{params.channel}/{group}" id={group}>{group}</a>
     </th>
   </tr>
   {#each data.get(group) as doc}
