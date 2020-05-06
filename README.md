@@ -1,4 +1,4 @@
-[![Build and Deploy](https://github.com/irclogs/svelte/workflows/make%20github-pages%20site/badge.svg)](https://github.com/irclogs/svelte/actions)
+[![Build and Deploy](https://github.com/irclogs/svelte/workflows/Build%20and%20Deploy/badge.svg)](https://github.com/irclogs/svelte/actions)
 
 # `Irclog CouchApp`
 ### a web app to view irclogs (svelte edition)

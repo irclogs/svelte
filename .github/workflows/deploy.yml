@@ -1,16 +1,14 @@
-name: make github-pages site
+name: Build and Deploy
 
-# only build on push to master
 on:
   push:
-    branches:
-    - master
+    branches: [ master ]
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v1
+    - uses: actions/checkout@v2
 
     - name: install
       run: yarn
