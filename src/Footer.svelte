@@ -19,7 +19,7 @@
     color: #555555;
   }
   footer.red {
-      background-color: red;
+    background-color: red;
   }
 </style>
 

@@ -1,10 +1,17 @@
 <script>
-  import Footer from './Footer.svelte';
-  import GithubBadge from './GithubBadge.svelte';
+  import Router from 'svelte-spa-router';
+
   import HomePage from './HomePage.svelte';
   import ChannelPage from './ChannelPage.svelte';
-  import { hashRouter } from './router.js';
-  const router = hashRouter();
+  import Footer from './Footer.svelte';
+  import GithubBadge from './GithubBadge.svelte';
+  import NotFound from './NotFound.svelte';
+
+  const routes = {
+    '/': HomePage,
+    '/:channel/:permalink?': ChannelPage,
+    '*': NotFound,
+  }
 </script>
 
 <style>
@@ -22,15 +29,6 @@
   div { padding: 20px; padding-bottom: 4em; }
 </style>
 
-<div>
-
-{#if $router == ""}
-<HomePage/>
-{:else if $router == 404 }
-<HomePage error="not found"/>
-{:else}
-<ChannelPage name={$router}/>
-{/if}
-</div>
+<Router {routes} />
 <Footer/>
 <GithubBadge/>
