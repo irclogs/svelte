@@ -13,6 +13,9 @@ jobs:
     - name: install
       run: yarn
 
+    - name: check
+      run: yarn run svelte-check
+
     - name: build
       run: yarn build --environment BUILD:staging
 
