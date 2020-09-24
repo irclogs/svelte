@@ -3,7 +3,19 @@
   let online;
 </script>
 
+<svelte:window bind:online={online}/>
+<footer class={online ? '':'red'}>
+  <a href="https://irc.softver.org.mk/">irclog home page</a> | ver: {version}
+</footer>
+
 <style>
+  :global(html) {
+    height: 100%;
+  }
+  :global(body) {
+    position: relative;
+    min-height: 100%;
+  }
   footer {
     padding: 8px 6px 10px;
     position: absolute;
@@ -22,9 +34,3 @@
     background-color: red;
   }
 </style>
-
-<svelte:window bind:online={online}/>
-<footer class={online ? '':'red'}>
-  <a href="https://irc.softver.org.mk/">irclog home page</a> | ver: {version}
-</footer>
-

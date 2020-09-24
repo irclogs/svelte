@@ -1,14 +1,11 @@
-<script>
+<script lang="ts">
+  import Header from './Header.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
   import { getChannelList } from './couch';
   document.title = "irclog";
 </script>
 
 <style>
-  header {
-    text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.3);
-    color: #444444;
-  }
   ul {
     list-style-type: square;
     padding-left: 2em;
@@ -17,9 +14,7 @@
   p { width: 50%; }
 </style>
 
-<header>
-<h1>IRC logs with realtime updates</h1>
-</header>
+<Header>IRC logs with realtime updates</Header>
 
 <p>
 This web page is a viewer of irclogs collected by my

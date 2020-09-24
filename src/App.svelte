@@ -15,20 +15,17 @@
 </script>
 
 <style>
-  :global(html) {
+  :global(body) {
     font-family: sans-serif;
     font-size: 16pt;
     line-height: 1.25;
-    height: 100%;
-  }
-  :global(body) {
     margin: 0;
-    position: relative;
-    min-height: 100%;
   }
-  div { padding: 20px; padding-bottom: 4em; }
+  main { padding: 0 4px 3rem; }
 </style>
 
-<Router {routes} />
+<main>
+  <Router {routes} />
+</main>
 <Footer/>
 <GithubBadge/>
