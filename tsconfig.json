@@ -2,9 +2,14 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
 
   "compilerOptions": {
+    "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
+    "lib": [
+      "ES2020",
+      "DOM"
+    ]
   },
   "include": ["src/**/*", "src/node_modules"],
-  "exclude": ["node_modules/*", "__sapper__/*", "dist/*"],
+  "exclude": ["node_modules/*", "__sapper__/*", "dist/*"]
 }

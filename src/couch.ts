@@ -1,12 +1,7 @@
 export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
 
-export async function getLast100(channel: string): Promise<ViewResponse> {
-  return await getLast(channel, 100);
-}
-
-
-export async function getLast(channel: string, limit: number): Promise<ViewResponse> {
+export async function getLast(channel: string, limit=100): Promise<ViewResponse> {
   const query = {
     limit: limit,
     include_docs: true,
@@ -16,9 +11,27 @@ export async function getLast(channel: string, limit: number): Promise<ViewRespo
     startkey: [channel, {}],
     endkey: [channel, 0]
   };
-  const response = await fetchQuery(query);
+  const response = await postQuery(query);
   const page = await response.json(); // validation needed here
   page.rows.reverse();
+  page.rows = page.rows.map( (row: {doc:Message}) => row.doc);
+  page.channel = channel;
+  return page;
+}
+
+
+export async function getPageAt(channel: string, limit: number, timestamp: number): Promise<ViewResponse> {
+  const query = {
+    limit: limit,
+    include_docs: true,
+    update_seq: true,
+    reduce: false,
+    descending: false,
+    startkey: [channel, timestamp],
+    endkey: [channel, {}]
+  };
+  const response = await postQuery(query);
+  const page = await response.json(); // validation needed here
   page.rows = page.rows.map( (row: {doc:Message}) => row.doc);
   page.channel = channel;
   return page;
@@ -38,7 +51,7 @@ export async function getPrevPage(currentPage: ViewResponse, limit=100): Promise
     startkey_docid: firstRow._id,
     endkey: [currentPage.channel, 0]
   };
-  const response = await fetchQuery(query);
+  const response = await postQuery(query);
   const prevPage = await response.json(); // validation needed here
   prevPage.rows.reverse();
   prevPage.rows = prevPage.rows.map( (row: {doc:Message}) => row.doc);
@@ -60,7 +73,7 @@ export async function getNextPage(currentPage: ViewResponse, limit=100): Promise
     startkey_docid: lastRow._id,
     endkey: [currentPage.channel, {}]
   };
-  const response = await fetchQuery(query);
+  const response = await postQuery(query);
   const nextPage = await response.json(); // validation needed here
   nextPage.rows = nextPage.rows.map( (row: {doc:Message}) => row.doc);
   nextPage.channel = currentPage.channel;
@@ -76,7 +89,7 @@ export async function getChannelList(): Promise<IChannel[]> {
     reduce: true,
     group_level: 1
   };
-  const response = await fetchQuery(query);
+  const response = await postQuery(query);
   const data = await response.json(); // validation needed here
   return data.rows?.map( (row: {key:[any], value:string}) => ({name: row.key[0], total_messages: row.value}));
 }
@@ -99,7 +112,7 @@ export function channelFeed(channel: string) {
 }
 
 
-async function fetchQuery(query: any) {
+async function postQuery(query: any) {
   const url = "https://irc.softver.org.mk/ddoc/_view/channel";
   const options: RequestInit = {
     mode: "cors",

@@ -1,14 +1,16 @@
 <script lang="ts">
+
   import Header from './Header.svelte';
   import Table from './ChannelView.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
-  import { getLast100, getPrevPage } from './couch';
+  import { getLast, getPrevPage } from './couch';
   import type { ViewResponse } from './couch';
+  import { slugify } from './slugs';
 
-  export let params: {channel: string, permalink?: string };
+  export let params: {channel: string};
   document.title = `irc logs for #${params.channel}`;
 
-  let response = getLast100(params.channel);
+  let response = getLast(params.channel, 100);
 
   function OnClickBack(page: ViewResponse) {
     response = getPrevPage(page)
@@ -28,7 +30,7 @@
   <button on:click={ ()=>OnClickBack(page) }>back</button>
 </div>
 
-<Table rows={ page.rows } channel={ params.channel } />
+<Table rows={ page.rows } channel={ params.channel } {slugify} />
 
 <div class="feed">…waiting for updates…</div>
 {:catch error}

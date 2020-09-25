@@ -3,13 +3,15 @@
 
   import HomePage from './HomePage.svelte';
   import ChannelPage from './ChannelPage.svelte';
+  import ChannelPageAt from './ChannelPageAt.svelte';
   import Footer from './Footer.svelte';
   import GithubBadge from './GithubBadge.svelte';
   import NotFound from './NotFound.svelte';
 
   const routes = {
     '/': HomePage,
-    '/:channel/:permalink?': ChannelPage,
+    '/:channel': ChannelPage,
+    '/:channel/:permalink': ChannelPageAt,
     '*': NotFound,
   }
 </script>
