@@ -28,11 +28,14 @@
 
   let response: Promise<ViewResponse>;
 
-  let timestamp = oportunisticParsePemalink(params.permalink);
-  if (timestamp) {
-    console.log(timestamp);
-    console.log(new Date(timestamp));
-    response = getPageAt(params.channel, 5, timestamp/1000);
+  $: {
+    console.log(params.permalink);
+    let timestamp = oportunisticParsePemalink(params.permalink);
+    if (timestamp) {
+      console.log(timestamp);
+      console.log(new Date(timestamp));
+      response = getPageAt(params.channel, 5, timestamp/1000);
+    }
   }
 
   function OnClickBack(page: ViewResponse): void {
