@@ -1,5 +1,6 @@
 <script lang="ts">
 
+  import { replace} from 'svelte-spa-router';
   import Header from './Header.svelte';
   import Table from './ChannelView.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
@@ -35,6 +36,10 @@
       console.log(timestamp);
       console.log(new Date(timestamp));
       response = getPageAt(params.channel, 5, timestamp/1000);
+    }
+    else {
+      // invalid permalink, redirect to 404
+      replace('/404');
     }
   }
 
