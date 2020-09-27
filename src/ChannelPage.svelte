@@ -33,6 +33,7 @@
 <Table rows={ page.rows } channel={ params.channel } {slugify} />
 
 <div class="feed">…waiting for updates…</div>
+
 {:catch error}
 	<p>Something went wrong: {error.message}</p>
 {/await}

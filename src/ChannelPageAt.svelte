@@ -1,5 +1,6 @@
 <script lang="ts">
 
+  // @ts-nocheck
   import { replace} from 'svelte-spa-router';
   import Header from './Header.svelte';
   import Table from './ChannelView.svelte';

@@ -1,4 +1,5 @@
-<script>
+<script lang="ts">
+  // @ts-nocheck
   import Router from 'svelte-spa-router';
 
   import HomePage from './HomePage.svelte';
