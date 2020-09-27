@@ -1,7 +1,7 @@
 <script lang="ts">
   import Header from './Header.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
-  import { getChannelList } from './couch';
+  import { fetchChannelList } from './couch-api';
   document.title = "irclog";
 </script>
 
@@ -24,7 +24,7 @@ also stored. You can also <a href="https://docs.couchdb.org/en/stable/replicatio
 the database at https://irc.softver.org.mk/api freely.
 </p>
 
-{#await getChannelList()}
+{#await fetchChannelList()}
     <PageLoader/>
 {:then channelList}
     <p>The following channels are currently logged:</p>

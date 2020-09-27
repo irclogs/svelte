@@ -1,5 +1,5 @@
 <script lang="ts">
-  // @ts-nocheck
+  // @ts-nocheck @ts-ignore-next-line: no typing for svelte-spa-router
   import Router from 'svelte-spa-router';
 
   import HomePage from './HomePage.svelte';

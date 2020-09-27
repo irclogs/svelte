@@ -1,22 +1,23 @@
 <script lang="ts">
+    import { derived } from 'svelte/store';
     import { colorize } from './colorize';
-    import type {  Message } from './couch';
+    import type { Message } from './couch-api';
+
     interface DisplayMessage extends Message {
-      date: string, time: string, datetime: string, slug: string
+      date: string, time: string, slug: string
     }
 
     export let channel: string;
-    export let rows: Message[] = [];
+    export let rows: SvelteStore<Message[]>;
     export let slugify: (_:number) => string;
 
     function addDateAndTime(msg: Message): DisplayMessage {
         let t = new Date(msg.timestamp * 1000);
-        let slug = slugify(Math.trunc(msg.timestamp*1000));
+        let slug = slugify(Math.trunc(msg.timestamp));
         // poor mans strftime
         let time = `${t.getHours().toString().padStart(2, '0')}:${t.getMinutes().toString().padStart(2, '0') }:${t.getSeconds().toString().padStart(2, '0')}`;
         let date = `${t.getFullYear()}-${(t.getMonth() + 1).toString().padStart(2, '0')}-${t.getDate().toString().padStart(2, '0')}`;
-        let datetime = `${date}T${time}`;
-        return {...msg, slug, time, date, datetime};
+        return {...msg, slug, time, date};
     };
 
     function groupByDate(acc: Map<string,DisplayMessage[]>, msg: DisplayMessage) {
@@ -24,26 +25,28 @@
           return acc;
     };
 
-    let grouppedRows: Map<string,DisplayMessage[]> = rows
-        .map(row => addDateAndTime(row))
-        .reduce(groupByDate, new Map())
+    let grouppedRows = derived(rows,
+        $rows => $rows
+          .map(row => addDateAndTime(row))
+          .reduce(groupByDate, new Map())
+    )
 </script>
 
 <table>
-  {#each [...grouppedRows.keys()] as group}
+  {#each [...$grouppedRows.keys()] as group}
     <tbody>
       <tr>
         <th colspan="2" class="group">
           <a class="permalink" href="#/{channel}/{group}" id={group}>{group}</a>
         </th>
       </tr>
-      {#each grouppedRows.get(group) ?? [] as doc}
+      {#each $grouppedRows.get(group) ?? [] as doc}
         <tr>
           <td>
             <span class="nick" style={colorize(doc.sender)}>{doc.sender}</span> &nbsp;{doc.message}
           </td>
           <td class="timestamp">
-            <a class="permalink" href="#/{channel}/{doc.slug}" id={doc.datetime}>{doc.time}</a>
+            <a class="permalink" href="#/{channel}/{doc.slug}" id={doc.slug}>{doc.time}</a>
           </td>
         </tr>
       {/each}

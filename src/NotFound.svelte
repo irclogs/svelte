@@ -15,3 +15,5 @@
 </style>
 
 <div class="outer"><div class="inner">404 Not found!</div></div>
+
+<script>document.title = "404 Not found!";</script>
