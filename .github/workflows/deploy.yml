@@ -14,7 +14,7 @@ jobs:
       run: yarn
 
     - name: check
-      run: yarn run svelte-check
+      run: yarn validate
 
     - name: build
       run: yarn build --environment BUILD:staging

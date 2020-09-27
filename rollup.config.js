@@ -34,9 +34,9 @@ export default {
     // some cases you'll need additional configuration —
     // consult the documentation for details:
     // https://github.com/rollup/rollup-plugin-commonjs
-    resolve(),
+    resolve({browser: true, dedupe: ['svelte']}),
     commonjs(),
-    typescript({ sourceMap: !production }),
+    typescript({ sourceMap: !production, inlineSources: !production }),
 
     // If we're building for production (npm run build
     // instead of npm run dev), minify
