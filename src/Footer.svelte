@@ -9,22 +9,12 @@
 </footer>
 
 <style>
-  :global(html) {
-    height: 100%;
-  }
-  :global(body) {
-    position: relative;
-    min-height: 100%;
-  }
   footer {
     padding: 8px 6px 10px;
-    position: absolute;
-    right: 0;
-    bottom: 0;
-    left: 0;
     background-color: #efefef;
     border-top: 1px dashed #aaaaaa;
     color: #555555;
+    margin-top: 1rem;
   }
   footer a {
     text-decoration: none;

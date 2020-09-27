@@ -10,6 +10,7 @@
 
   const routes = {
     '/': HomePage,
+    '/404': NotFound,
     '/:channel': ChannelPage,
     '/:channel/:permalink': ChannelPageAt,
     '*': NotFound,
@@ -22,8 +23,19 @@
     font-size: 16pt;
     line-height: 1.25;
     margin: 0;
+    display: flex;
+    flex-flow: column;
+    height: 100vh;
+    justify-content: space-between;
   }
-  main { padding: 0 4px 3rem; }
+  main {
+    padding: 0 4px;
+    flex: 1;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-flow: column;
+  }
 </style>
 
 <main>

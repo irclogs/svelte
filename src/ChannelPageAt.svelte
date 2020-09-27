@@ -75,7 +75,9 @@
 
 <style>
   div.pagination-button {
+    width: 100%;
     text-align: center;
+    margin-bottom: 0.5rem;
   }
   div.pagination-button.forward {
     margin-top: 1.2rem;

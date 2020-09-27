@@ -26,7 +26,7 @@
 {#await response}
   <PageLoader/>
 {:then page}
-<div style="text-align: center;">
+<div class="pagination-button">
   <button on:click={ ()=>OnClickBack(page) }>back</button>
 </div>
 
@@ -38,5 +38,16 @@
 {/await}
 
 <style>
-  div.feed { text-align: center; font-size: 60%; opacity: 0.5; }
+  div.pagination-button {
+    width: 100%;
+    margin-bottom: 0.5rem;
+    text-align: center;
+  }
+  div.feed {
+    width: 100%;
+    margin-top: 10px;
+    text-align: center;
+    font-size: 0.6rem;
+    opacity: 0.5;
+  }
 </style>
