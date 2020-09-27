@@ -4,7 +4,7 @@
     import type { Message } from './couch-api';
 
     interface DisplayMessage extends Message {
-      date: string, time: string, slug: string
+        date: string, time: string, slug: string
     }
 
     export let channel: string;
@@ -21,8 +21,8 @@
     };
 
     function groupByDate(acc: Map<string,DisplayMessage[]>, msg: DisplayMessage) {
-          acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
-          return acc;
+        acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
+        return acc;
     };
 
     let grouppedRows = derived(rows,
@@ -75,4 +75,4 @@
       color: rgb(128, 128, 128);
       text-decoration: none;
     }
-  </style>
+</style>
