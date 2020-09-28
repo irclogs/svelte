@@ -3,7 +3,7 @@
   import Router from 'svelte-spa-router';
 
   import HomePage from './HomePage.svelte';
-  import ChannelPage from './ChannelPage.svelte';
+  import ChannelFeed from './ChannelFeed.svelte';
   import ChannelPageAt from './ChannelPageAt.svelte';
   import Footer from './Footer.svelte';
   import GithubBadge from './GithubBadge.svelte';
@@ -12,7 +12,7 @@
   const routes = {
     '/': HomePage,
     '/404': NotFound,
-    '/:channel': ChannelPage,
+    '/:channel': ChannelFeed,
     '/:channel/:permalink': ChannelPageAt,
     '*': NotFound,
   }
