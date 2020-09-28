@@ -5,6 +5,16 @@
       padding: 1em 0;
     }
     header h1 { margin: 0; }
+    header :global(h1 a) {
+      color: inherit;
+      text-decoration: none;
+    }
+    header :global(h1 a:hover) {
+      color: #777777;
+      text-decoration: underline;
+    }
+
+
 </style>
 
 <header>

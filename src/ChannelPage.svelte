@@ -12,7 +12,7 @@
 
 </script>
 
-<Header>irc logs for #{params.channel}</Header>
+<Header><a href='#/'>irc logs</a> for #{params.channel}</Header>
 
 {#await getLatest(params.channel, 100) }
   <PageLoader/>

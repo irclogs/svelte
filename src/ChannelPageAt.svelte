@@ -27,7 +27,7 @@
 
 </script>
 
-<Header>irc logs for #{params.channel}</Header>
+<Header><a href='#/'>irc logs</a> for <a href="#/{params.channel}">#{params.channel}</a></Header>
 
 {#await response}
   <PageLoader/>
