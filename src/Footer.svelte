@@ -21,6 +21,6 @@
     color: #555555;
   }
   footer.red {
-    background-color: red;
+    border-top: 2px solid red;
   }
 </style>
