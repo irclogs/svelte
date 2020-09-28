@@ -11,7 +11,8 @@
     padding-left: 2em;
     margin: 1em 0px;
   }
-  p { width: 50%; }
+  p { max-width: 768px; }
+
 </style>
 
 <Header>IRC logs with realtime updates</Header>
