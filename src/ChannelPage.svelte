@@ -19,7 +19,7 @@
 
 {:then page}
 
-<Button onClick={ async () => {await page.prev(50)} }>back</Button>
+<Button onClick={ () => page.prev(50) }>back</Button>
 <Table rows={ page } channel={ params.channel } {slugify} />
 
 <div class="feed">…waiting for updates…</div>

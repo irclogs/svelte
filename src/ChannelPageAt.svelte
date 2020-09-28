@@ -35,9 +35,9 @@
   <PageLoader/>
 {:then page}
 
-<Button onClick={ async () => {await page.prev(5)} }>back</Button>
+<Button onClick={ () => page.prev(5) }>back</Button>
 <Table rows={ page } channel={ params.channel } {slugify} />
-<Button onClick={ async () => {await page.next(5)} }>forward</Button>
+<Button onClick={ () => page.next(5) }>forward</Button>
 
 {:catch error}
 	<p>Something went wrong: {error.message}</p>
