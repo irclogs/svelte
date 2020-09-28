@@ -2,11 +2,11 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
 
   "compilerOptions": {
-    "target": "ES2016",
+    "target": "es2015",
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "lib": ["DOM", "ES6", "ES2017.string", "ES2020.BigInt"]
+    "lib": ["DOM", "ES6", "es2016.array.include", "es2017.string", "es2020.BigInt"]
   },
   "include": ["src/**/*", "src/node_modules"],
   "exclude": ["node_modules/*", "__sapper__/*", "dist/*"]

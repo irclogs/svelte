@@ -1,9 +1,10 @@
 import json from "@rollup/plugin-json";
 import resolve from "@rollup/plugin-node-resolve";
+import babel from '@rollup/plugin-babel';
+import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import svelte from "rollup-plugin-svelte";
 import autoPreprocess from 'svelte-preprocess';
-import commonjs from "@rollup/plugin-commonjs";
 import { terser } from "rollup-plugin-terser";
 
 const production = !process.env.ROLLUP_WATCH;
@@ -27,6 +28,10 @@ export default {
     json({
       exclude: "node_modules/**",
       preferConst: true,
+    }),
+    babel({
+      babelHelpers: 'bundled',
+      extensions: [".js", ".mjs", ".html", ".svelte"],
     }),
 
     // If you have external dependencies installed from
