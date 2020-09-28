@@ -14,7 +14,7 @@ function runFeed(channel: string, since: string, store: Writable<Message[]>, sig
   fetchChanges(channel, since, signal).then(async (changes) => {
     store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
     runFeed(channel, changes.last_seq, store, signal);
-  }).catch(e => console.log("fetchChanges failed:", e.message));
+  }).catch(e => console.log("fetchChanges failed:", e, "signal:", signal));
 }
 
 
