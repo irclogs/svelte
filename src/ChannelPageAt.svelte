@@ -11,7 +11,6 @@
   import { getPage } from './couch';
   import type { Page } from './couch';
 
-
   export let params: {channel: string, permalink: string };
   document.title = `irc logs for #${params.channel}`;
 
@@ -20,8 +19,7 @@
     let timestamp = oportunisticParsePemalink(params.permalink);
     if (timestamp) {
       response = getPage(params.channel, timestamp, 5);
-    }
-    else {
+    } else {
       // invalid permalink, redirect to 404
       redirect_to('/404');
     }
