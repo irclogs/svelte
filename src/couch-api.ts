@@ -3,7 +3,7 @@ export interface Message { timestamp: number, sender: string, channel: string, m
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
 
 
-export async function fetchViewLatest(channel: string, limit=100): Promise<ViewResponse> {
+export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
   const query = {
     limit: limit,
     include_docs: true,
@@ -16,7 +16,7 @@ export async function fetchViewLatest(channel: string, limit=100): Promise<ViewR
   const response = await postQuery(query);
   const page = await response.json(); // validation needed here
   page.rows.reverse();
-  page.rows = page.rows.map( (row: {doc:Message}) => row.doc);
+  page.rows = page.rows.map((row: { doc: Message }) => row.doc);
   return page;
 }
 
@@ -33,7 +33,7 @@ export async function fetchViewAtTimestamp(channel: string, timestamp: number, l
   };
   const response = await postQuery(query);
   const page = await response.json(); // validation needed here
-  page.rows = page.rows.map( (row: {doc:Message}) => row.doc);
+  page.rows = page.rows.map((row: { doc: Message }) => row.doc);
   return page;
 }
 
@@ -53,7 +53,7 @@ export async function fetchViewBefore(channel: string, firstRow: Message, limit:
   const response = await postQuery(query);
   const view = await response.json(); // validation needed here
   view.rows.reverse();
-  view.rows = view.rows.map( (row: {doc:Message}) => row.doc);
+  view.rows = view.rows.map((row: { doc: Message }) => row.doc);
   return view;
 }
 
@@ -72,7 +72,7 @@ export async function fetchViewAfter(channel: string, lastRow: Message, limit: n
   };
   const response = await postQuery(query);
   const view = await response.json(); // validation needed here
-  view.rows = view.rows.map( (row: {doc:Message}) => row.doc);
+  view.rows = view.rows.map((row: { doc: Message }) => row.doc);
   return view;
 }
 
@@ -85,10 +85,10 @@ export async function fetchChannelList(): Promise<Channel[]> {
   };
   const response = await postQuery(query);
   const data = await response.json(); // validation needed here
-  return data.rows?.map( extractChannelData ) ?? [];
+  return data.rows?.map(extractChannelData) ?? [];
 }
 
-function extractChannelData(row: { key: [string]; value: number; }): { name: string, total_messages: number}  {
+function extractChannelData(row: { key: [string]; value: number; }): { name: string, total_messages: number } {
   return { name: row.key[0], total_messages: row.value };
 }
 
