@@ -30,8 +30,9 @@ export default {
       preferConst: true,
     }),
     babel({
-      babelHelpers: 'bundled',
-      extensions: [".js", ".mjs", ".html", ".svelte"],
+      babelHelpers: 'runtime',
+      plugins: ["@babel/plugin-transform-runtime"],
+      extensions: [".js", ".ts", ".mjs", ".html", ".svelte"],
     }),
 
     // If you have external dependencies installed from
