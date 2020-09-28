@@ -10,21 +10,25 @@ import { fetchChanges, fetchViewLatest, fetchViewAtTimestamp, fetchViewAfter, fe
 import type { Message } from './couch-api';
 
 
-function runFeed(channel: string, since: string, store: Writable<Message[]>) {
-  fetchChanges(channel, since).then(async (changes) => {
+function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
+  fetchChanges(channel, since, signal).then(async (changes) => {
     store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
-    runFeed(channel, changes.last_seq, store);
-  });
+    runFeed(channel, changes.last_seq, store, signal);
+  }).catch(e => console.log("fetchChanges failed:", e.message));
 }
 
 
 export async function getLatest(channel: string, limit = 100): Promise<Page> {
-  const store = writable([] as Message[]);
+  var controller = new AbortController();
+  const store = writable([] as Message[], () => {
+    return () => controller.abort(); // no more subscribers
+  });
+
   let page = await fetchViewLatest(channel, limit);
   store.set(page.rows);
 
   // @ts-ignore: the Updater type is not exported by svelte
-  runFeed(channel, page.update_seq, store);
+  runFeed(channel, page.update_seq, store, controller.signal);
 
   let rows = page.rows;
   return {

@@ -93,7 +93,7 @@ function extractChannelData(row: { key: [string]; value: number; }): { name: str
 }
 
 
-export async function fetchChanges(channel: string, since: string) {
+export async function fetchChanges(channel: string, since: string, signal?: AbortSignal) {
   const feedUrl = new URL("https://irc.softver.org.mk/api/_changes");
   const query = {
     feed: "longpoll",
@@ -106,6 +106,7 @@ export async function fetchChanges(channel: string, since: string) {
   feedUrl.search = new URLSearchParams(query).toString();
 
   const options: RequestInit = {
+    signal,
     mode: "cors",
     headers: {
       "accept": "application/json",
