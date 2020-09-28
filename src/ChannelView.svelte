@@ -66,7 +66,10 @@
       font-family: monospace;
       text-decoration: none;
     }
-    td.timestamp { text-align: right; }
+    td.timestamp {
+      text-align: right;
+      vertical-align: top;
+    }
     table tbody tr th.group {
       border-top: 1px dashed #a0a0a0;
       text-align: right;
