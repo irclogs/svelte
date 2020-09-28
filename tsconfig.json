@@ -6,7 +6,7 @@
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
-    "lib": ["DOM", "ES2016", "ES2020.BigInt"]
+    "lib": ["DOM", "ES6", "ES2017.string", "ES2020.BigInt"]
   },
   "include": ["src/**/*", "src/node_modules"],
   "exclude": ["node_modules/*", "__sapper__/*", "dist/*"]
