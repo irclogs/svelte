@@ -19,10 +19,14 @@
 </script>
 
 <style>
+  @media screen and (min-device-width: 1600px) {
+    :global(html) {
+      font-size: 16pt;
+      line-height: 1.25;
+    }
+  }
   :global(body) {
     font-family: sans-serif;
-    font-size: 16pt;
-    line-height: 1.25;
     margin: 0;
     display: flex;
     flex-flow: column;
