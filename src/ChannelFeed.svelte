@@ -1,5 +1,4 @@
 <script lang="ts">
-
   import Header from './Header.svelte';
   import Table from './ChannelView.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
@@ -9,7 +8,6 @@
 
   export let params: {channel: string};
   document.title = `irc logs for #${params.channel}`;
-
 </script>
 
 <Header><a href='#/'>irc logs</a> for #{params.channel}</Header>

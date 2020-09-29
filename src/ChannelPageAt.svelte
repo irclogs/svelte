@@ -24,7 +24,6 @@
       redirect_to('/404');
     }
   }
-
 </script>
 
 <Header><a href='#/'>irc logs</a> for <a href="#/{params.channel}">#{params.channel}</a></Header>

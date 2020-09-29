@@ -11,8 +11,9 @@ import type { Message } from './couch-api';
 
 
 function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
-  fetchChanges(channel, since, signal).then(async (changes) => {
-    store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
+  fetchChanges(channel, since, signal).then(async (changes:{results:any[], last_seq:string}) => {
+    if (changes.results.length > 0)
+        store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
     runFeed(channel, changes.last_seq, store, signal);
   }).catch(e => console.log("fetchChanges failed:", e, "signal:", signal));
 }
