@@ -1,7 +1,7 @@
 export interface Channel { name: string, total_messages: number };
 export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
-
+export interface ChangesResponse { results: {doc: Message}[], last_seq: string };
 
 export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
   const query = {
@@ -93,7 +93,7 @@ function extractChannelData(row: { key: [string]; value: number; }): { name: str
 }
 
 
-export async function fetchChanges(channel: string, since: string, signal?: AbortSignal) {
+export async function fetchChanges(channel: string, since: string, signal?: AbortSignal): Promise<ChangesResponse> {
   const feedUrl = new URL("https://irc.softver.org.mk/api/_changes");
   const query = {
     feed: "longpoll",

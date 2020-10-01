@@ -9,13 +9,20 @@ export interface Page extends Readable<Message[]> {
 import { fetchChanges, fetchViewLatest, fetchViewAtTimestamp, fetchViewAfter, fetchViewBefore } from './couch-api';
 import type { Message } from './couch-api';
 
+const sleep = (ms:number) => new Promise(f => setTimeout(f, ms));
 
-function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
-  fetchChanges(channel, since, signal).then(async (changes:{results:any[], last_seq:string}) => {
-    if (changes.results.length > 0)
+async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
+  while (true) {
+    try {
+      let changes = await fetchChanges(channel, since, signal);
+      if (changes.results.length > 0)
         store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
-    runFeed(channel, changes.last_seq, store, signal);
-  }).catch(e => console.log("fetchChanges failed:", e, "signal:", signal));
+    } catch (e) {
+      if (signal.aborted) return; // expected exception, quit!
+      console.log("fetchChanges errored:", e, "… retrying in 15s");
+      await sleep(15_000);
+    }
+  }
 }
 
 
@@ -28,7 +35,6 @@ export async function getLatest(channel: string, limit = 100): Promise<Page> {
   let page = await fetchViewLatest(channel, limit);
   store.set(page.rows);
 
-  // @ts-ignore: the Updater type is not exported by svelte
   runFeed(channel, page.update_seq, store, controller.signal);
 
   let rows = page.rows;
