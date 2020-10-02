@@ -99,8 +99,7 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
     feed: "longpoll",
     timeout: "90000",
     include_docs: "true",
-    filter: "log/channel",
-    channel: channel,
+    filter: "_selector",
     since: since
   };
   feedUrl.search = new URLSearchParams(query).toString();
@@ -112,6 +111,7 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
       "accept": "application/json",
       "content-type": "application/json"
     },
+    body: JSON.stringify({selector: {"channel": channel}}),
     method: "POST"
   };
   const response = await fetch(feedUrl.toString(), options);
