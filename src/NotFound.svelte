@@ -14,6 +14,6 @@
   }
 </style>
 
-<div class="outer"><div class="inner">404 Not found!</div></div>
+<svelte:head><title>404 Not found!</title></svelte:head>
 
-<script>document.title = "404 Not found!";</script>
+<div class="outer"><div class="inner">404 Not found!</div></div>

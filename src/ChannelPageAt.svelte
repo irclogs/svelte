@@ -12,7 +12,6 @@
   import type { Page } from './couch';
 
   export let params: {channel: string, permalink: string };
-  document.title = `irc logs for #${params.channel}`;
 
   let response: Promise<Page>;
   $: {
@@ -25,6 +24,8 @@
     }
   }
 </script>
+
+<svelte:head><title>irc logs for #{params.channel}</title></svelte:head>
 
 <Header><a href='#/'>irc logs</a> for <a href="#/{params.channel}">#{params.channel}</a></Header>
 

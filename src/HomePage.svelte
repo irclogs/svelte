@@ -2,7 +2,6 @@
   import Header from './Header.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
   import { fetchChannelList } from './couch-api';
-  document.title = "irclog";
 </script>
 
 <style>
@@ -14,6 +13,8 @@
   p { max-width: 768px; }
 
 </style>
+
+<svelte:head><title>irclog</title></svelte:head>
 
 <Header>IRC logs with realtime updates</Header>
 

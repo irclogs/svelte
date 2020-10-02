@@ -7,8 +7,9 @@
   import { slugify } from './slugs';
 
   export let params: {channel: string};
-  document.title = `irc logs for #${params.channel}`;
 </script>
+
+<svelte:head><title>irc logs for #{params.channel}</title></svelte:head>
 
 <Header><a href='#/'>irc logs</a> for #{params.channel}</Header>
 
