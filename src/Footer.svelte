@@ -4,7 +4,7 @@
 </script>
 
 <svelte:window bind:online={online}/>
-<footer class={online ? '':'red'}>
+<footer class:offline={!online}>
   <a href="https://irc.softver.org.mk/">irclog home page</a> | ver: {version}
 </footer>
 
@@ -20,7 +20,7 @@
     text-decoration: none;
     color: #555555;
   }
-  footer.red {
+  footer.offline {
     border-top: 2px solid red;
   }
 </style>
