@@ -12,11 +12,13 @@ import type { Message } from './couch-api';
 const sleep = (ms:number) => new Promise(f => setTimeout(f, ms));
 
 async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
+  let last_seq = since;
   while (true) {
     try {
-      let changes = await fetchChanges(channel, since, signal);
+      let changes = await fetchChanges(channel, last_seq, signal);
       if (changes.results.length > 0)
         store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
+      last_seq = changes.last_seq;
     } catch (e) {
       if (signal.aborted) return; // expected exception, quit!
       console.log("fetchChanges errored:", e, "… retrying in 15s");
@@ -35,6 +37,8 @@ export async function getLatest(channel: string, limit = 100): Promise<Page> {
   let page = await fetchViewLatest(channel, limit);
   store.set(page.rows);
 
+  // this is an async function, but we don't await on it here
+  // we let it run unhinged, controlled by the signal, and output going to the store
   runFeed(channel, page.update_seq, store, controller.signal);
 
   let rows = page.rows;
