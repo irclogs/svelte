@@ -34,5 +34,16 @@
     text-align: center;
     font-size: 0.6rem;
     opacity: 0.5;
+    animation: pulse 30s infinite;
+  }
+  @keyframes pulse {
+    0%, 90%, 100% {
+      /* opacity: 0.5; */
+      text-shadow: #0068ad 0 0 0;
+    }
+    95% {
+      /* opacity: 0.6; */
+      text-shadow: #0068ad 0 0 2px;
+    }
   }
 </style>
