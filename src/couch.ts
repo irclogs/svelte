@@ -11,13 +11,18 @@ import type { Message } from './couch-api';
 
 const sleep = (ms:number) => new Promise(f => setTimeout(f, ms));
 
+
 async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
   let last_seq = since;
   while (true) {
     try {
       let changes = await fetchChanges(channel, last_seq, signal);
-      if (changes.results.length > 0)
-        store.update(rows => rows.concat(changes.results.map((row: { doc: any }) => row.doc)));
+      if (changes.results.length > 0) {
+        let newRows = changes.results
+            .map((row: { doc: any }) => row.doc)        // extract just the docs
+            .sort((a, b)=> a.timestamp - b.timestamp);  // and sort them, since the _changes feed is not guaranteed to be sorted
+        store.update(rows => rows.concat(newRows));
+      }
       last_seq = changes.last_seq;
     } catch (e) {
       if (signal.aborted) return; // expected exception, quit!
