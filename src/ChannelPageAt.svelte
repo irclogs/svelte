@@ -10,12 +10,13 @@
 
   export let params: {channel: string, permalink: string };
 
-  function load(channel: string, permalink: string, n: number) {
+  async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
-    if (!timestamp)
-      redirect_to('/404'); // invalid permalink, redirect to 404
-
-    return getPage(channel, timestamp, n);
+    if (!timestamp) {
+      redirect_to('/404');
+      throw Error('invalid permalink, will redirect to 404');
+    }
+    return await getPage(channel, timestamp, n);
   }
 </script>
 
