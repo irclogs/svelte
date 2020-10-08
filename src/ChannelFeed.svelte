@@ -19,7 +19,7 @@
 {:then page}
 
 <Button onClick={ () => page.prev(50) }>back</Button>
-<Table rows={ page } channel={ params.channel } {slugify} />
+<Table rows={ page } channel={ params.channel } {slugify} autoscroll={true} />
 
 <div class="feed">…waiting for updates…</div>
 

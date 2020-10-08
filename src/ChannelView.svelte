@@ -2,6 +2,7 @@
     import { derived } from 'svelte/store';
     import { colorize } from './colorize';
     import type { Message } from './couch-api';
+    import { autoscroll_init } from './autoscroll';
 
     interface DisplayMessage extends Message {
         date: string, time: string, slug: string
@@ -10,6 +11,11 @@
     export let channel: string;
     export let rows: SvelteStore<Message[]>;
     export let slugify: (_:number) => string;
+    export let autoscroll = false;
+
+    if (autoscroll) {
+      autoscroll_init();
+    }
 
     function addDateAndTime(msg: Message): DisplayMessage {
         let t = new Date(msg.timestamp * 1000);
