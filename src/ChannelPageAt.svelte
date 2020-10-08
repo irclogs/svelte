@@ -1,6 +1,5 @@
 <script lang="ts">
-  // @ts-nocheck @ts-ignore-next-line: no typing for svelte-spa-router
-  import { replace as redirect_to } from 'svelte-spa-router';
+  import { replace as redirect_to } from 'svelte-spa-router/Router.svelte';
 
   import { slugify, oportunisticParsePemalink } from './slugs';
   import Header from './Header.svelte';
@@ -11,7 +10,7 @@
 
   export let params: {channel: string, permalink: string };
 
-  function load(channel, permalink, n) {
+  function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
     if (!timestamp)
       redirect_to('/404'); // invalid permalink, redirect to 404

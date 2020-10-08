@@ -1,6 +1,5 @@
 <script lang="ts">
-  // @ts-nocheck @ts-ignore-next-line: no typing for svelte-spa-router
-  import Router from 'svelte-spa-router';
+  import Router from 'svelte-spa-router/Router.svelte';
 
   import HomePage from './HomePage.svelte';
   import ChannelFeed from './ChannelFeed.svelte';
