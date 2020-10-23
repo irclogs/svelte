@@ -1,5 +1,5 @@
 <script lang="ts">
-  import Router from 'svelte-spa-router/Router.svelte';
+  import Router from 'svelte-spa-router';
 
   import HomePage from './HomePage.svelte';
   import ChannelFeed from './ChannelFeed.svelte';

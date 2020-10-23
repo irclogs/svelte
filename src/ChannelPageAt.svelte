@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { replace as redirect_to } from 'svelte-spa-router/Router.svelte';
+  import { replace as redirect_to } from 'svelte-spa-router';
 
   import { slugify, oportunisticParsePemalink } from './slugs';
   import Header from './Header.svelte';
