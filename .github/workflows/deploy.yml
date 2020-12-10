@@ -17,6 +17,8 @@ jobs:
       run: yarn validate
 
     - name: build
+      env:
+        NODE_ENV: production
       run: yarn build
 
     - name: deploy to gh-pages

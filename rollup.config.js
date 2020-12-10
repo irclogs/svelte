@@ -1,51 +1,43 @@
 import json from "@rollup/plugin-json";
+import css from "rollup-plugin-css-only";
 import resolve from "@rollup/plugin-node-resolve";
-import babel from '@rollup/plugin-babel';
 import commonjs from "@rollup/plugin-commonjs";
 import typescript from "@rollup/plugin-typescript";
 import svelte from "rollup-plugin-svelte";
 import autoPreprocess from 'svelte-preprocess';
-import { terser } from "rollup-plugin-terser";
+import { plugins as prodPlugins } from './rollup.prod.config.js';
 
-const production = !process.env.ROLLUP_WATCH;
+const production = process.env.NODE_ENV == "production";
+const sourcemap = true;
+
+const plugins = [
+  svelte({
+    compilerOptions: { dev: !production },
+    extensions: [".svelte"],
+    preprocess: autoPreprocess(),
+  }),
+  typescript({ sourceMap: sourcemap }),
+  css({ output: "bundle.css" }),
+  json({
+    exclude: "node_modules/**",
+    preferConst: true,
+  }),
+
+  resolve({browser: true, dedupe: ['svelte']}),
+  commonjs(),
+];
+
+if (production) {
+   plugins.push(...prodPlugins);
+}
 
 export default {
   input: "src/main.ts",
   output: {
+    sourcemap,
     file: "dist/bundle.js",
-    sourcemap: true,
     format: "iife",
-    name: "app",
+    name: "app"
   },
-  plugins: [
-    svelte({
-      dev: !production,
-      css: (css) => {
-        css.write("bundle.css");
-      },
-      preprocess: autoPreprocess(),
-    }),
-    json({
-      exclude: "node_modules/**",
-      preferConst: true,
-    }),
-    babel({
-      babelHelpers: 'runtime',
-      plugins: ["@babel/plugin-transform-runtime"],
-      extensions: [".js", ".ts", ".mjs", ".html", ".svelte"],
-    }),
-
-    // If you have external dependencies installed from
-    // npm, you'll most likely need these plugins. In
-    // some cases you'll need additional configuration —
-    // consult the documentation for details:
-    // https://github.com/rollup/rollup-plugin-commonjs
-    resolve({browser: true, dedupe: ['svelte']}),
-    commonjs(),
-    typescript({ sourceMap: !production, inlineSources: !production }),
-
-    // If we're building for production (npm run build
-    // instead of npm run dev), minify
-    production && terser(),
-  ],
+  plugins
 };
