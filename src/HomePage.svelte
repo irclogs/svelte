@@ -23,7 +23,7 @@ This web page is a viewer of irclogs collected by my
 <a href="https://github.com/gdamjan/erlang-irc-bot">erlang irc bot</a>.
 The bot stores the logs in a CouchDB where this web-app (or couchapp) is
 also stored. You can also <a href="https://docs.couchdb.org/en/stable/replication/">replicate</a>
-the database at https://irc.softver.org.mk/api freely.
+the database at https://db.softver.org.mk/irclog freely.
 </p>
 
 {#await fetchChannelList()}

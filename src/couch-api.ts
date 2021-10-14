@@ -3,6 +3,8 @@ export interface Message { timestamp: number, sender: string, channel: string, m
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
 export interface ChangesResponse { results: {doc: Message}[], last_seq: string };
 
+const CouchURL = new URL("https://db.softver.org.mk/irclog/");
+
 export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
   const query = {
     limit: limit,
@@ -94,7 +96,7 @@ function extractChannelData(row: { key: [string]; value: number; }): { name: str
 
 
 export async function fetchChanges(channel: string, since: string, signal?: AbortSignal): Promise<ChangesResponse> {
-  const feedUrl = new URL("https://irc.softver.org.mk/api/_changes");
+  const feedUrl = new URL("_changes", CouchURL);
   const query = {
     feed: "longpoll",
     timeout: "90000",
@@ -123,7 +125,7 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
 
 
 async function postQuery(query: any) {
-  const url = "https://irc.softver.org.mk/ddoc/_view/channel";
+  const url = new URL("_design/log/_view/channel", CouchURL);
   const options: RequestInit = {
     mode: "cors",
     headers: {
