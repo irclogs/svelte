@@ -1,9 +1,11 @@
+import { getEnv } from "./environments";
+
 export interface Channel { name: string, total_messages: number };
 export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
 export interface ChangesResponse { results: { doc: Message }[], last_seq: string };
 
-const CouchURL = new URL("https://db.softver.org.mk/irclog/");
+const CouchURL = new URL(getEnv().CouchURL);
 
 export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
   const query = {
