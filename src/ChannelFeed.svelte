@@ -3,8 +3,8 @@
   import Table from './ChannelView.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
   import Button from './PaginationButton.svelte';
-  import { getLatest } from './couch';
-  import { slugify } from './slugs';
+  import { getLatest } from './libs/couch';
+  import { slugify } from './libs/slugs';
 
   export let params: {channel: string};
 </script>

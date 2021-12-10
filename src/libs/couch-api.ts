@@ -1,4 +1,4 @@
-import { getEnv } from "./environments";
+import { getEnv } from "../environments";
 
 export interface Channel { name: string, total_messages: number };
 export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };

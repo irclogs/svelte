@@ -1,8 +1,8 @@
 <script lang="ts">
     import { derived } from 'svelte/store';
-    import { colorize } from './colorize';
-    import type { Message } from './couch-api';
-    import { autoscroll_init } from './autoscroll';
+    import { colorize } from './libs/colorize';
+    import type { Message } from './libs/couch-api';
+    import { autoscroll_init } from './libs/autoscroll';
 
     interface DisplayMessage extends Message {
         date: string, time: string, slug: string

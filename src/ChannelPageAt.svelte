@@ -1,12 +1,12 @@
 <script lang="ts">
   import { replace as redirect_to } from 'svelte-spa-router';
 
-  import { slugify, oportunisticParsePemalink } from './slugs';
   import Header from './Header.svelte';
   import Table from './ChannelView.svelte';
   import PageLoader from './spinners/PageLoader.svelte';
   import Button from './PaginationButton.svelte';
-  import { getPage } from './couch';
+  import { slugify, oportunisticParsePemalink } from './libs/slugs';
+  import { getPage } from './libs/couch';
 
   export let params: {channel: string, permalink: string };
 
