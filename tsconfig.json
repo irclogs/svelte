@@ -2,6 +2,7 @@
   "extends": "@tsconfig/svelte/tsconfig.json",
 
   "compilerOptions": {
+    "types": [ "node" ],
     "strict": true,
     "noImplicitAny": true,
     "strictNullChecks": true,
