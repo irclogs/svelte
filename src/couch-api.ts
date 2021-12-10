@@ -1,7 +1,7 @@
 export interface Channel { name: string, total_messages: number };
 export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
-export interface ChangesResponse { results: {doc: Message}[], last_seq: string };
+export interface ChangesResponse { results: { doc: Message }[], last_seq: string };
 
 const CouchURL = new URL("https://db.softver.org.mk/irclog/");
 
@@ -113,10 +113,10 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
       "accept": "application/json",
       "content-type": "application/json"
     },
-    body: JSON.stringify({selector: {"channel": channel}}),
+    body: JSON.stringify({ selector: { "channel": channel } }),
     method: "POST"
   };
-  const response = await fetch(feedUrl.toString(), options);
+  const response = await fetch(`${feedUrl}`, options);
   if (!response.ok) {
     throw new Error(`Network response was not ok: ${response.statusText}`);
   }
@@ -134,7 +134,7 @@ async function postQuery(query: any) {
     },
     method: "POST"
   };
-  const response = await fetch(url, {
+  const response = await fetch(`${url}`, {
     ...options,
     body: JSON.stringify(query)
   });
