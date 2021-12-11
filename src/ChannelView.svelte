@@ -3,6 +3,7 @@
     import { colorize } from './libs/colorize';
     import type { Message } from './libs/couch-api';
     import { autoscroll_init } from './libs/autoscroll';
+    import { formatMsg } from './libs/messageFormatter';
 
     interface DisplayMessage extends Message {
         date: string, time: string, slug: string
@@ -33,6 +34,7 @@
 
     let grouppedRows = derived(rows,
         $rows => $rows
+          .map(row => ({...row, message: formatMsg(row.message)}))
           .map(row => addDateAndTime(row))
           .reduce(groupByDate, new Map())
     )
@@ -61,7 +63,9 @@
 </table>
 
 <style>
-    table { min-width: 100%; }
+    table {
+      min-width: 100%;
+    }
     span.nick {
       font-size: 70%;
       padding: 1px 2px;
