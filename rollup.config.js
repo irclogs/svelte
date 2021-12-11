@@ -9,7 +9,6 @@ import autoPreprocess from 'svelte-preprocess';
 import { plugins as prodPlugins } from './rollup.prod.config.js';
 
 const isProduction = process.env.NODE_ENV == "production";
-const sourcemap = true;
 
 const plugins = [
   replace({
@@ -24,7 +23,7 @@ const plugins = [
     extensions: [".svelte"],
     preprocess: autoPreprocess(),
   }),
-  typescript({ sourceMap: sourcemap }),
+  typescript({ sourceMap: false }),
   css({ output: "bundle.css" }),
   json({
     exclude: "node_modules/**",
@@ -42,7 +41,7 @@ if (isProduction) {
 export default {
   input: "src/main.ts",
   output: {
-    sourcemap,
+    sourcemap: true,
     file: "dist/bundle.js",
     format: "iife",
     name: "app"
