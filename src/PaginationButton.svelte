@@ -1,13 +1,19 @@
 <script lang="ts">
-  export let onClick: () => Promise<any>;
+  export let onClick: (ev:Event) => Promise<void>;
   let disabled = false;
 
-  async function handleClick() {
+  async function handleClick(ev: Event) {
     disabled = true;
-    await onClick();
+    await onClick(ev);
     disabled = false;
   }
 </script>
+
+<div class={$$props.class}>
+  <button on:click|stopPropagation={ handleClick } {disabled} class:disabled>
+    <slot/>
+  </button>
+</div>
 
 <style>
   div {
@@ -43,9 +49,3 @@
     100% { box-shadow: 0 0 0 #0068ad; }
   }
 </style>
-
-<div class={$$props.class}>
-    <button on:click|stopPropagation={ handleClick } {disabled} class:disabled>
-      <slot/>
-    </button>
-</div>
