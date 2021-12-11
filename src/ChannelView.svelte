@@ -26,7 +26,7 @@
           <a class="permalink" href="#/{channel}/{group}" id={group}>{group}</a>
         </th>
       </tr>
-      {#each $grouppedRows.get(group) ?? [] as doc}
+      {#each $grouppedRows.get(group) ?? [] as doc (doc.timestamp)}
         <tr>
           <td>
             <span class="nick" style={colorize(doc.sender)}>{doc.sender}</span>
