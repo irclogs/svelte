@@ -22,16 +22,16 @@
 
 <svelte:head><title>irc logs for #{params.channel}</title></svelte:head>
 
-<Header><a href='#/'>irc logs</a> for <a href="#/{params.channel}">#{params.channel}</a></Header>
+<Header>
+  <a href="#/">irc logs</a> for <a href="#/{params.channel}">#{params.channel}</a>
+</Header>
 
 {#await load(params.channel, params.permalink, 10)}
-  <PageLoader/>
+  <PageLoader />
 {:then page}
-
-<Button onClick={ () => page.prev(5) }>back</Button>
-<Table rows={ page } channel={ params.channel } />
-<Button onClick={ () => page.next(5) }>forward</Button>
-
+  <Button onClick={() => page.prev(5)}>back</Button>
+  <Table rows={page} channel={params.channel} />
+  <Button onClick={() => page.next(5)}>forward</Button>
 {:catch error}
-	<p>Something went wrong: {error.message}</p>
+  <p>Something went wrong: {error.message}</p>
 {/await}
