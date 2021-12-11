@@ -4,13 +4,17 @@
   import { groupRows, MessageView } from "./libs/couch";
 
   export let channel: string;
-  export let rows: SvelteStore< MessageView[]>;
+  export let rows: SvelteStore<MessageView[]>;
   export let autoscroll = false;
 
   let grouppedRows = groupRows(rows);
 
   if (autoscroll) {
     autoscroll_init();
+  }
+
+  function embed(node: HTMLSpanElement, nodes: Node[]) {
+    node.replaceChildren(...nodes);
   }
 </script>
 
@@ -26,7 +30,7 @@
         <tr>
           <td>
             <span class="nick" style={colorize(doc.sender)}>{doc.sender}</span>
-            &nbsp;{@html doc.html.join('')}
+            <span use:embed={doc.html} />
           </td>
           <td class="timestamp">
             <a class="permalink" href="#/{channel}/{doc.slug}" id={doc.slug}>{doc.time}</a>
