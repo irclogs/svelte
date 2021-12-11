@@ -11,9 +11,9 @@ in couchdb attachments.
 
 ## Quick start - for developers
 
-Run `yarn` and `yarn dev`.
+Run `yarn` and `yarn watch`.
 
-> The public server has localhost:5000 allowed for CORS requests, so running on port 5000
+> The public server has localhost:8000 allowed for CORS requests, so running on port 8000
 > will make the api available
 
 ## Production
