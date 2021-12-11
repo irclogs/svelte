@@ -4,7 +4,6 @@
   import PageLoader from './spinners/PageLoader.svelte';
   import Button from './PaginationButton.svelte';
   import { getLatest } from './libs/couch';
-  import { slugify } from './libs/slugs';
 
   export let params: {channel: string};
 </script>
@@ -19,7 +18,7 @@
 {:then page}
 
 <Button onClick={ () => page.prev(50) }>back</Button>
-<Table rows={ page } channel={ params.channel } {slugify} autoscroll={true} />
+<Table rows={ page } channel={ params.channel } autoscroll={true} />
 
 <div class="feed">…waiting for updates…</div>
 

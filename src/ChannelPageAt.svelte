@@ -1,20 +1,20 @@
 <script lang="ts">
-  import { replace as redirect_to } from 'svelte-spa-router';
+  import { replace as redirect_to } from "svelte-spa-router";
 
-  import Header from './Header.svelte';
-  import Table from './ChannelView.svelte';
-  import PageLoader from './spinners/PageLoader.svelte';
-  import Button from './PaginationButton.svelte';
-  import { slugify, oportunisticParsePemalink } from './libs/slugs';
-  import { getPage } from './libs/couch';
+  import Header from "./Header.svelte";
+  import Table from "./ChannelView.svelte";
+  import PageLoader from "./spinners/PageLoader.svelte";
+  import Button from "./PaginationButton.svelte";
+  import { getPage } from "./libs/couch";
+  import { oportunisticParsePemalink } from "./libs/slugs";
 
-  export let params: {channel: string, permalink: string };
+  export let params: { channel: string; permalink: string };
 
   async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
     if (!timestamp) {
-      redirect_to('/404');
-      throw Error('invalid permalink, will redirect to 404');
+      redirect_to("/404");
+      throw Error("invalid permalink, will redirect to 404");
     }
     return await getPage(channel, timestamp, n);
   }
@@ -29,7 +29,7 @@
 {:then page}
 
 <Button onClick={ () => page.prev(5) }>back</Button>
-<Table rows={ page } channel={ params.channel } {slugify} />
+<Table rows={ page } channel={ params.channel } />
 <Button onClick={ () => page.next(5) }>forward</Button>
 
 {:catch error}
