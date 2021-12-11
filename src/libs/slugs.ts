@@ -5,19 +5,30 @@ const hashids = new Hashids('Never change me in the lifetime of this application
 export const slugify = hashids.encode.bind(hashids);
 
 
-// returns timestamp in seconds since unix epoch or null if parsing failed
+/*
+ * Several types of permalinks are supported, in order of preference:
+ *  /#/<channel>/<hashid> - see https://hashids.org/
+ *  /#/<channel>/YYYY-MM-DD
+ *  /#/<channel>/YYYY-MM-DDTHH:MM:SS
+ *
+ * Try to parse the timestamp, first to succeed wins.
+ *
+ * Returns a timestamp in seconds since unix epoch or null if parsing failed
+ */
 export function oportunisticParsePemalink(permalink: string): number | null {
-  // try hashids of a timestamp in seconds
+  // try hashids first
   try {
     let t = hashids.decode(permalink);
     if (t !== []) return (t[0] as number);
   } catch { } // noop - obviously not a hashid
 
-  // next try Date - for ex. '2020-02-03' add the 0th hour to force local zone, otherwise it's parsed as UTC timezone
+  // try a Date second, for ex. '2020-02-03'
+  // since for this permalink makes the most sense for the users local timezone,
+  // add the 0th hour to the string, otherwise it would be parsed as UTC timezone
   let date = Date.parse(permalink + 'T00:00:00');
   if (date !== NaN) return date / 1000;
 
-  // the above will fail if permalink was already datetime, so try that next
+  // if all failed, it might be just a timestamp or full DateTime
   let datetime = Date.parse(permalink);
   if (datetime !== NaN) return datetime / 1000;
 
