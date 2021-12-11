@@ -1,18 +1,26 @@
-import { getEnv } from "../environments";
+/*
+ * Low level wrappers over fetch to work with couchdb
+ *
+ */
 
 export interface Channel { name: string, total_messages: number };
 export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };
 export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
 export interface ChangesResponse { results: { doc: Message }[], last_seq: string };
 
+import { getEnv } from "../environments";
 const CouchURL = new URL(getEnv().CouchURL);
+
+const commonQueryArgs = {
+  include_docs: true,
+  update_seq: true,
+  reduce: false,
+};
 
 export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
   const query = {
+    ...commonQueryArgs,
     limit: limit,
-    include_docs: true,
-    update_seq: true,
-    reduce: false,
     descending: true,
     startkey: [channel, {}],
     endkey: [channel, 0]
@@ -27,10 +35,8 @@ export async function fetchViewLatest(channel: string, limit = 100): Promise<Vie
 
 export async function fetchViewAtTimestamp(channel: string, timestamp: number, limit: number): Promise<ViewResponse> {
   const query = {
+    ...commonQueryArgs,
     limit: limit,
-    include_docs: true,
-    update_seq: true,
-    reduce: false,
     descending: false,
     startkey: [channel, timestamp],
     endkey: [channel, {}]
@@ -44,10 +50,8 @@ export async function fetchViewAtTimestamp(channel: string, timestamp: number, l
 
 export async function fetchViewBefore(channel: string, firstRow: Message, limit: number): Promise<ViewResponse> {
   const query = {
+    ...commonQueryArgs,
     limit: limit,
-    include_docs: true,
-    update_seq: true,
-    reduce: false,
     descending: true,
     skip: 1,
     startkey: [channel, firstRow.timestamp],
@@ -64,10 +68,8 @@ export async function fetchViewBefore(channel: string, firstRow: Message, limit:
 
 export async function fetchViewAfter(channel: string, lastRow: Message, limit: number): Promise<ViewResponse> {
   const query = {
+    ...commonQueryArgs,
     limit: limit,
-    include_docs: true,
-    update_seq: true,
-    reduce: false,
     descending: false,
     skip: 1,
     startkey: [channel, lastRow.timestamp],
