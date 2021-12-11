@@ -1,6 +1,5 @@
 <script lang="ts">
   export let onClick: () => Promise<any>;
-  let button: HTMLButtonElement;
   let disabled = false;
 
   async function handleClick() {
@@ -46,7 +45,7 @@
 </style>
 
 <div class={$$props.class}>
-    <button bind:this={button} on:click|stopPropagation={ handleClick } {disabled} class:disabled>
+    <button on:click|stopPropagation={ handleClick } {disabled} class:disabled>
       <slot/>
     </button>
 </div>
