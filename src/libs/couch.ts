@@ -9,7 +9,7 @@ import type { Readable, Writable } from 'svelte/store';
 import type { Message } from './couch-api';
 
 export interface MessageView extends Message {
-  date: string, time: string, slug: string
+  date: string, time: string, slug: string, html: (HTMLElement|string)[],
 }
 
 export interface Page extends Readable<MessageView[]> {
@@ -122,7 +122,7 @@ function msg2View(msg: Message): MessageView {
     ...msg,
     ...datetime(msg.timestamp),
     slug: slugify(Math.trunc(msg.timestamp)),
-    message: formatMsg(msg.message),
+    html: formatMsg(msg.message),
   }
 }
 

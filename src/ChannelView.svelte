@@ -26,7 +26,7 @@
         <tr>
           <td>
             <span class="nick" style={colorize(doc.sender)}>{doc.sender}</span>
-            &nbsp;{doc.message}
+            &nbsp;{@html doc.html.join('')}
           </td>
           <td class="timestamp">
             <a class="permalink" href="#/{channel}/{doc.slug}" id={doc.slug}>{doc.time}</a>
