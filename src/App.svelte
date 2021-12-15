@@ -41,9 +41,11 @@
   main {
     padding: 0 4px;
     flex: 1;
+    /*
     display: flex;
     align-items: flex-start;
     justify-content: flex-start;
     flex-flow: column;
+    */
   }
 </style>
