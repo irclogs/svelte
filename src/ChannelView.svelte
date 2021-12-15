@@ -30,7 +30,7 @@
         <tr>
           <td>
             <span class="nick" style={colorize(doc.sender)}>{doc.sender}</span>
-            <span use:embed={doc.html} />
+            <span use:embed={doc.html} class="message-text" />
           </td>
           <td class="timestamp">
             <a class="permalink" href="#/{channel}/{doc.slug}" id={doc.slug}>{doc.time}</a>
@@ -66,5 +66,19 @@
   a.permalink {
     color: rgb(128, 128, 128);
     text-decoration: none;
+  }
+  :global(.message-text a) {
+    white-space: nowrap;
+    max-width: calc(65vw);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: inline-block;
+    vertical-align: middle;
+    font-size: smaller;
+    color: #227;
+  }
+  :global(.message-text code) {
+    background-color: #f0f0f0;
+    font-size: smaller;
   }
 </style>
