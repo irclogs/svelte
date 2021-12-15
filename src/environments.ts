@@ -1,12 +1,21 @@
+
+const defaults = {
+  pageSize: 20,
+  indexPageSize: 100,
+}
 const production = {
+  ...defaults,
   CouchURL: "https://db.softver.org.mk/irclog/",
   HomeURL: "https://github.com/irclogs/svelte/",
 }
 const dev = {
+  ...defaults,
+  pageSize: 5,
   CouchURL: "https://db.softver.org.mk/irclog/",
   HomeURL: "https://github.com/irclogs/svelte/",
 }
 const test = {
+  ...defaults,
   CouchURL: "http://localhost:5984/irclog/",
   HomeURL: "https://github.com/irclogs/svelte/",
 }

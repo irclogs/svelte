@@ -7,8 +7,10 @@
   import Button from "./PaginationButton.svelte";
   import { getPage } from "./libs/couch";
   import { oportunisticParsePemalink } from "./libs/slugs";
+  import { getEnv } from "./environments";
 
   export let params: { channel: string; permalink: string };
+  const pageSize = getEnv().pageSize;
 
   async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
@@ -29,9 +31,9 @@
 {#await load(params.channel, params.permalink, 10)}
   <PageLoader />
 {:then page}
-  <Button onClick={() => page.prev(5)}>back</Button>
+  <Button onClick={() => page.prev(pageSize)}>back</Button>
   <Table rows={page} channel={params.channel} />
-  <Button onClick={() => page.next(5)}>forward</Button>
+  <Button onClick={() => page.next(pageSize)}>forward</Button>
 {:catch error}
   <p>Something went wrong: {error.message}</p>
 {/await}
