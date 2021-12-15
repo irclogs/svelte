@@ -1,21 +1,27 @@
 <script lang="ts">
-  import Router from 'svelte-spa-router';
+  import Router from "svelte-spa-router";
 
-  import HomePage from './HomePage.svelte';
-  import ChannelFeed from './ChannelFeed.svelte';
-  import ChannelPageAt from './ChannelPageAt.svelte';
-  import Footer from './Footer.svelte';
-  import GithubBadge from './GithubBadge.svelte';
-  import NotFound from './NotFound.svelte';
+  import IndexPage from "./IndexPage.svelte";
+  import ChannelFeed from "./ChannelFeed.svelte";
+  import ChannelPageAt from "./ChannelPageAt.svelte";
+  import Footer from "./Footer.svelte";
+  import GithubBadge from "./GithubBadge.svelte";
+  import NotFound from "./NotFound.svelte";
 
   const routes = {
-    '/': HomePage,
-    '/404': NotFound,
-    '/:channel': ChannelFeed,
-    '/:channel/:permalink': ChannelPageAt,
-    '*': NotFound,
-  }
+    "/": IndexPage,
+    "/404": NotFound,
+    "/:channel": ChannelFeed,
+    "/:channel/:permalink": ChannelPageAt,
+    "*": NotFound,
+  };
 </script>
+
+<main>
+  <Router {routes} />
+</main>
+<Footer />
+<GithubBadge />
 
 <style>
   @media screen and (min-device-width: 1600px) {
@@ -41,9 +47,3 @@
     flex-flow: column;
   }
 </style>
-
-<main>
-  <Router {routes} />
-</main>
-<Footer/>
-<GithubBadge/>
