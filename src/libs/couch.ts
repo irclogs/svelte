@@ -104,6 +104,18 @@ export async function getPage(channel: string, timestamp: number, limit: number)
 }
 
 
+export function groupRows(rows: Readable<Message[]>): Readable<Map<string, MessageView[]>> {
+  return derived(rows,
+    $rows => $rows.map(msg2View).reduce(groupByDate, new Map())
+  )
+}
+
+function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<string, MessageView[]> {
+  // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
+  acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
+  return acc;
+};
+
 function datetime(timestamp: number): { date: string, time: string } {
   // poor mans strftime to ISO 8601
   const date = new Date(timestamp * 1000);
@@ -125,18 +137,6 @@ function msg2View(msg: Message): MessageView {
   }
 }
 
-
-function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView) {
-  // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
-  acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
-  return acc;
-};
-
-export function groupRows(rows: Readable<Message[]>): Readable<Map<string, MessageView[]>> {
-  return derived(rows,
-    $rows => $rows.map(msg2View).reduce(groupByDate, new Map())
-  )
-}
 
 // awaitable sleep/setTimeout
 function sleep(ms: number): Promise<void> {
