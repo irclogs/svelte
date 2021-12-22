@@ -109,12 +109,12 @@ export async function getPage(channel: string, timestamp: number, limit: number)
 function datetime(timestamp: number): { date: string, time: string } {
   // poor mans strftime to ISO 8601
   const date = new Date(timestamp * 1000);
-  const YYYY = date.getUTCFullYear().toString().padStart(4, "0");
-  const MM = (date.getUTCMonth() + 1).toString().padStart(2, "0");
-  const DD = date.getUTCDate().toString().padStart(2, "0");
-  const hh = date.getUTCHours().toString().padStart(2, "0");
-  const mm = date.getUTCMinutes().toString().padStart(2, "0");
-  const ss = date.getUTCSeconds().toString().padStart(2, "0");
+  const YYYY = date.getFullYear().toString().padStart(4, "0");
+  const MM = (date.getMonth() + 1).toString().padStart(2, "0");
+  const DD = date.getDate().toString().padStart(2, "0");
+  const hh = date.getHours().toString().padStart(2, "0");
+  const mm = date.getMinutes().toString().padStart(2, "0");
+  const ss = date.getSeconds().toString().padStart(2, "0");
   return { time: `${hh}:${mm}:${ss}`, date: `${YYYY}-${MM}-${DD}` };
 }
 
