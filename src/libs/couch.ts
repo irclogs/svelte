@@ -12,7 +12,7 @@ export interface MessageView extends Message {
   date: string, time: string, slug: string, html: Node[],
 }
 
-export interface Page extends Readable<MessageView[]> {
+export interface Page extends Readable<Message[]> {
   prev: (arg0: number) => Promise<void>,
   next: (arg0: number) => Promise<void>,
 };
@@ -24,7 +24,7 @@ import { formatMsg } from './messageFormatter';
 import { slugify } from './slugs';
 
 
-async function runFeed(channel: string, since: string, store: Writable<MessageView[]>, signal: AbortSignal) {
+async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
   let last_seq = since;
   while (true) {
     try {
@@ -32,8 +32,7 @@ async function runFeed(channel: string, since: string, store: Writable<MessageVi
       if (changes.results.length > 0) {
         let newRows = changes.results
           .map((row: { doc: any }) => row.doc)         // extract just the docs
-          .sort((a, b) => a.timestamp - b.timestamp)   // and sort them, since the _changes feed is not guaranteed to be sorted
-          .map(msg2View);
+          .sort((a, b) => a.timestamp - b.timestamp);  // and sort them, since the _changes feed is not guaranteed to be sorted
         store.update(rows => rows.concat(newRows));
       }
       last_seq = changes.last_seq;
@@ -48,28 +47,27 @@ async function runFeed(channel: string, since: string, store: Writable<MessageVi
 
 export async function getLatest(channel: string, limit = 100): Promise<Page> {
   const controller = new AbortController();
-  const store = writable([] as MessageView[], () => {
+  const store = writable([] as Message[], () => {
     return () => controller.abort(); // no more subscribers
   });
 
   const page = await fetchViewLatest(channel, limit);
-  const rows = page.rows.map(msg2View);
-  store.set(rows);
+  store.set(page.rows);
 
   // this is an async function, but we don't await on it here
   // we let it run unhinged, controlled by the signal, and output going to the store
   runFeed(channel, page.update_seq, store, controller.signal);
 
   // internal mutable state
-  let first = rows[0]
+  let first = page.rows.at(0);
   return {
     subscribe: store.subscribe,
 
     prev: async (n: number) => {
+      if (first === undefined) return;
       const resp = await fetchViewBefore(channel, first, n);
-      const rows_ = resp.rows.map(msg2View);
-      first = rows_[0];
-      store.update(r => rows_.concat(r));
+      first = resp.rows.at(0);
+      store.update(r => resp.rows.concat(r));
     },
     // this page doesn't have the next command
     next: async (_) => { }
@@ -78,29 +76,28 @@ export async function getLatest(channel: string, limit = 100): Promise<Page> {
 
 
 export async function getPage(channel: string, timestamp: number, limit: number): Promise<Page> {
-  const store = writable([] as MessageView[]);
+  const store = writable([] as Message[]);
   const page = await fetchViewAtTimestamp(channel, timestamp, limit);
-  const rows = page.rows.map(msg2View);
-  store.set(rows);
+  store.set(page.rows);
 
   // internal mutable state
-  let first = rows[0];
-  let last = rows[rows.length - 1];
+  let first = page.rows.at(0);
+  let last = page.rows.at(-1);
   return {
     subscribe: store.subscribe,
 
     prev: async (n: number) => {
+      if (first === undefined) return;
       const resp = await fetchViewBefore(channel, first, n);
-      const rows_ = resp.rows.map(msg2View);
-      first = rows_[0];
-      store.update(r => rows_.concat(r));
+      first = resp.rows.at(0);
+      store.update(r => resp.rows.concat(r));
     },
 
     next: async (n: number) => {
+      if (last === undefined) return;
       const resp = await fetchViewAfter(channel, last, n);
-      const rows_ = resp.rows.map(msg2View);
-      last = rows_[rows_.length - 1];
-      store.update(r => r.concat(rows_));
+      last = resp.rows.at(-1);
+      store.update(r => r.concat(resp.rows));
     },
   };
 }
@@ -134,9 +131,9 @@ function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView) {
   return acc;
 };
 
-export function groupRows(rows: Readable<MessageView[]>) {
+export function groupRows(rows: Readable<Message[]>): Readable<Map<string, MessageView[]>> {
   return derived(rows,
-    $rows => $rows.reduce(groupByDate, new Map())
+    $rows => $rows.map(msg2View).reduce(groupByDate, new Map())
   )
 }
 
