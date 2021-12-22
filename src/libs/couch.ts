@@ -6,7 +6,8 @@
  */
 
 import type { Readable, Writable } from 'svelte/store';
-import type { Message } from './couch-api';
+import type { Message as _Message  } from './couch-api';
+export type Message = _Message;
 
 export interface MessageView extends Message {
   date: string, time: string, slug: string, html: Node[],

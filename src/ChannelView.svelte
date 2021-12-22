@@ -1,10 +1,10 @@
 <script lang="ts">
   import { colorize } from "./libs/colorize";
   import { autoscroll_init } from "./libs/autoscroll";
-  import { groupRows, MessageView } from "./libs/couch";
+  import { groupRows, Message } from "./libs/couch";
 
   export let channel: string;
-  export let rows: SvelteStore<MessageView[]>;
+  export let rows: SvelteStore<Message[]>;
   export let autoscroll = false;
 
   let grouppedRows = groupRows(rows);
