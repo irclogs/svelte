@@ -3,26 +3,26 @@
   "version": "1.0.0",
   "license": "Apache-2.0",
   "devDependencies": {
-    "@babel/core": "^7.11.6",
-    "@babel/plugin-transform-runtime": "^7.11.5",
-    "@babel/preset-env": "^7.11.5",
-    "@rollup/plugin-babel": "^5.2.1",
+    "@babel/core": "^7.16.5",
+    "@babel/plugin-transform-runtime": "^7.16.5",
+    "@babel/preset-env": "^7.16.5",
+    "@rollup/plugin-babel": "^5.3.0",
     "@rollup/plugin-commonjs": "^21.0.1",
-    "@rollup/plugin-json": "^4.0.0",
-    "@rollup/plugin-node-resolve": "^13.0.6",
+    "@rollup/plugin-json": "^4.1.0",
+    "@rollup/plugin-node-resolve": "^13.1.1",
     "@rollup/plugin-replace": "^3.0.0",
-    "@rollup/plugin-typescript": "^8.0.0",
-    "@tsconfig/svelte": "^2.0.1",
-    "@types/node": "^16.11.12",
-    "rollup": "^2.0.0",
-    "rollup-plugin-css-only": "^3.0.0",
+    "@rollup/plugin-typescript": "^8.3.0",
+    "@tsconfig/svelte": "^3.0.0",
+    "@types/node": "^17.0.4",
+    "rollup": "^2.61.1",
+    "rollup-plugin-css-only": "^3.1.0",
     "rollup-plugin-serve": "^1.1.0",
-    "rollup-plugin-svelte": "^7.0.0",
+    "rollup-plugin-svelte": "^7.1.0",
     "rollup-plugin-terser": "^7.0.2",
-    "svelte-check": "^2.2.10",
-    "svelte-preprocess": "^4.3.0",
-    "tslib": "^2.0.1",
-    "typescript": "^4.1.0"
+    "svelte-check": "^2.2.11",
+    "svelte-preprocess": "^4.10.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.5.4"
   },
   "scripts": {
     "validate": "svelte-check",
@@ -31,9 +31,9 @@
   },
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
-    "hashids": "^2.2.8",
+    "hashids": "^2.2.10",
     "linkifyjs": "^3.0.4",
-    "svelte": "^3.31.0",
-    "svelte-spa-router": "^3.1.0"
+    "svelte": "^3.44.3",
+    "svelte-spa-router": "^3.2.0"
   }
 }
