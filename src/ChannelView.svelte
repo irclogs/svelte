@@ -1,7 +1,8 @@
 <script lang="ts">
   import { colorize } from "./libs/colorize";
   import { autoscroll_init } from "./libs/autoscroll";
-  import { groupRows, Message } from "./libs/couch";
+  import { groupRows } from "./libs/couch";
+  import type { Message } from "./libs/couch";
 
   export let channel: string;
   export let rows: SvelteStore<Message[]>;
