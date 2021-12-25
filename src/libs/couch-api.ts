@@ -3,10 +3,28 @@
  *
  */
 
-export interface Channel { name: string, total_messages: number };
-export interface Message { timestamp: number, sender: string, channel: string, message: string, _id: string };
-export interface ViewResponse { channel: string, rows: Message[], update_seq: string, total_rows: number, offset: number };
-export interface ChangesResponse { results: { doc: Message }[], last_seq: string };
+export interface Channel {
+  name: string;
+  total_messages: number;
+}
+export interface Message {
+  timestamp: number;
+  sender: string;
+  channel: string;
+  message: string;
+  _id: string;
+}
+export interface ViewResponse {
+  channel: string;
+  rows: Message[];
+  update_seq: string;
+  total_rows: number;
+  offset: number;
+}
+export interface ChangesResponse {
+  results: { doc: Message }[];
+  last_seq: string;
+}
 
 import { getEnv } from "../environments";
 const CouchURL = new URL(getEnv().CouchURL);
@@ -17,13 +35,16 @@ const commonQueryArgs = {
   reduce: false,
 };
 
-export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
+export async function fetchViewLatest(
+  channel: string,
+  limit = 100
+): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
     descending: true,
     startkey: [channel, {}],
-    endkey: [channel, 0]
+    endkey: [channel, 0],
   };
   const response = await postQuery(query);
   const page = await response.json(); // validation needed here
@@ -32,14 +53,17 @@ export async function fetchViewLatest(channel: string, limit = 100): Promise<Vie
   return page;
 }
 
-
-export async function fetchViewAtTimestamp(channel: string, timestamp: number, limit: number): Promise<ViewResponse> {
+export async function fetchViewAtTimestamp(
+  channel: string,
+  timestamp: number,
+  limit: number
+): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
     descending: false,
     startkey: [channel, timestamp],
-    endkey: [channel, {}]
+    endkey: [channel, {}],
   };
   const response = await postQuery(query);
   const page = await response.json(); // validation needed here
@@ -47,8 +71,11 @@ export async function fetchViewAtTimestamp(channel: string, timestamp: number, l
   return page;
 }
 
-
-export async function fetchViewBefore(channel: string, firstRow: Message, limit: number): Promise<ViewResponse> {
+export async function fetchViewBefore(
+  channel: string,
+  firstRow: Message,
+  limit: number
+): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
@@ -56,7 +83,7 @@ export async function fetchViewBefore(channel: string, firstRow: Message, limit:
     skip: 1,
     startkey: [channel, firstRow.timestamp],
     startkey_docid: firstRow._id,
-    endkey: [channel, 0]
+    endkey: [channel, 0],
   };
   const response = await postQuery(query);
   const view = await response.json(); // validation needed here
@@ -65,8 +92,11 @@ export async function fetchViewBefore(channel: string, firstRow: Message, limit:
   return view;
 }
 
-
-export async function fetchViewAfter(channel: string, lastRow: Message, limit: number): Promise<ViewResponse> {
+export async function fetchViewAfter(
+  channel: string,
+  lastRow: Message,
+  limit: number
+): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
@@ -74,7 +104,7 @@ export async function fetchViewAfter(channel: string, lastRow: Message, limit: n
     skip: 1,
     startkey: [channel, lastRow.timestamp],
     startkey_docid: lastRow._id,
-    endkey: [channel, {}]
+    endkey: [channel, {}],
   };
   const response = await postQuery(query);
   const view = await response.json(); // validation needed here
@@ -82,31 +112,36 @@ export async function fetchViewAfter(channel: string, lastRow: Message, limit: n
   return view;
 }
 
-
 export async function fetchChannelList(): Promise<Channel[]> {
   const query = {
     update_seq: true,
     reduce: true,
-    group_level: 1
+    group_level: 1,
   };
   const response = await postQuery(query);
   const data = await response.json(); // validation needed here
   return data.rows?.map(extractChannelData) ?? [];
 }
 
-function extractChannelData(row: { key: [string]; value: number; }): { name: string, total_messages: number } {
+function extractChannelData(row: { key: [string]; value: number }): {
+  name: string;
+  total_messages: number;
+} {
   return { name: row.key[0], total_messages: row.value };
 }
 
-
-export async function fetchChanges(channel: string, since: string, signal?: AbortSignal): Promise<ChangesResponse> {
+export async function fetchChanges(
+  channel: string,
+  since: string,
+  signal?: AbortSignal
+): Promise<ChangesResponse> {
   const feedUrl = new URL("_changes", CouchURL);
   const query = {
     feed: "longpoll",
     timeout: "90000",
     include_docs: "true",
     filter: "_selector",
-    since: since
+    since: since,
   };
   feedUrl.search = new URLSearchParams(query).toString();
 
@@ -114,11 +149,11 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
     signal,
     mode: "cors",
     headers: {
-      "accept": "application/json",
-      "content-type": "application/json"
+      accept: "application/json",
+      "content-type": "application/json",
     },
-    body: JSON.stringify({ selector: { "channel": channel } }),
-    method: "POST"
+    body: JSON.stringify({ selector: { channel: channel } }),
+    method: "POST",
   };
   const response = await fetch(`${feedUrl}`, options);
   if (!response.ok) {
@@ -127,20 +162,19 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
   return await response.json();
 }
 
-
 async function postQuery(query: any) {
   const url = new URL("_design/log/_view/channel", CouchURL);
   const options: RequestInit = {
     mode: "cors",
     headers: {
-      "accept": "application/json",
-      "content-type": "application/json"
+      accept: "application/json",
+      "content-type": "application/json",
     },
-    method: "POST"
+    method: "POST",
   };
   const response = await fetch(`${url}`, {
     ...options,
-    body: JSON.stringify(query)
+    body: JSON.stringify(query),
   });
   if (!response.ok) {
     throw new Error(`Network response was not ok: ${response.statusText}`);

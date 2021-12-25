@@ -1,4 +1,4 @@
-import { beforeUpdate, afterUpdate } from 'svelte';
+import { beforeUpdate, afterUpdate } from "svelte";
 
 /**
  * Initialize the autoscroller. Needs to be called in the context of a component because it'll
@@ -17,7 +17,7 @@ import { beforeUpdate, afterUpdate } from 'svelte';
 export function autoscroll_init() {
   let do_scroll = false;
   let prevHeight = document.body.scrollHeight;
-  let footer = document.querySelector('footer');
+  let footer = document.querySelector("footer");
 
   beforeUpdate(() => {
     // autoscroll only if the footer is visible

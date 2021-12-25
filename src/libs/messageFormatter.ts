@@ -1,23 +1,22 @@
 import * as linkifyjs from "linkifyjs";
 linkifyjs.options.defaults.defaultProtocol = "https";
 
-
 function codify(s: string): Node[] {
   const re = new RegExp("`.*?`", "g");
   let out = [];
   let match;
   let last = 0;
-  while (match = re.exec(s)) {
+  while ((match = re.exec(s))) {
     let prefix = s.slice(last, match.index);
     if (prefix) out.push(document.createTextNode(prefix));
 
     let needle = match[0];
-    last = match.index + needle.length
+    last = match.index + needle.length;
 
-    let el = document.createElement('code');
+    let el = document.createElement("code");
     el.innerText = needle;
     out.push(el);
-  };
+  }
   let rest = s.slice(last);
   if (rest) out.push(document.createTextNode(rest));
   return out;
@@ -33,9 +32,9 @@ function linkify(text: string): Node[] {
       return;
     }
 
-    const prefix = text.substring(last, match.start)
+    const prefix = text.substring(last, match.start);
     out.push(document.createTextNode(prefix));
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = match.href;
     a.innerText = match.value;
     out.push(a);
@@ -50,6 +49,7 @@ function linkify(text: string): Node[] {
 }
 
 export function formatMsg(msg: string): Node[] {
-  return codify(msg)
-    .flatMap(n => ((n instanceof Text) ? linkify(n.textContent ?? '') : n));
+  return codify(msg).flatMap((n) =>
+    n instanceof Text ? linkify(n.textContent ?? "") : n
+  );
 }

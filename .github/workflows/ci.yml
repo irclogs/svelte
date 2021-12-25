@@ -2,10 +2,9 @@ name: Build and Deploy
 
 on:
   push:
-    branches: [ main ]
 
 jobs:
-  deploy:
+  ci:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -14,7 +13,7 @@ jobs:
       run: yarn
 
     - name: check
-      run: yarn validate
+      run: yarn check
 
     - name: build
       env:
@@ -23,7 +22,8 @@ jobs:
 
     - name: deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
+      if: github.ref == 'refs/heads/main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
-        cname: irc.softver.org.mk        
+        cname: irc.softver.org.mk
