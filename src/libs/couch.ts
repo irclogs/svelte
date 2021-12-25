@@ -6,7 +6,7 @@
  */
 
 import type { Readable, Writable } from 'svelte/store';
-import type { Message as _Message  } from './couch-api';
+import type { Message as _Message } from './couch-api';
 export type Message = _Message;
 
 export interface MessageView extends Message {
@@ -114,7 +114,7 @@ function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<str
   // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
   acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
   return acc;
-};
+}
 
 function datetime(timestamp: number): { date: string, time: string } {
   // poor mans strftime to ISO 8601
