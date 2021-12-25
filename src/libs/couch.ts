@@ -5,36 +5,48 @@
  *
  */
 
-import type { Readable, Writable } from 'svelte/store';
-import type { Message as _Message } from './couch-api';
+import type { Readable, Writable } from "svelte/store";
+import type { Message as _Message } from "./couch-api";
 export type Message = _Message;
 
 export interface MessageView extends Message {
-  date: string, time: string, slug: string, html: Node[],
+  date: string;
+  time: string;
+  slug: string;
+  html: Node[];
 }
 
 export interface Page extends Readable<Message[]> {
-  prev: (arg0: number) => Promise<void>,
-  next: (arg0: number) => Promise<void>,
-};
+  prev: (arg0: number) => Promise<void>;
+  next: (arg0: number) => Promise<void>;
+}
 
+import { writable, derived } from "svelte/store";
+import {
+  fetchChanges,
+  fetchViewLatest,
+  fetchViewAtTimestamp,
+  fetchViewAfter,
+  fetchViewBefore,
+} from "./couch-api";
+import { formatMsg } from "./messageFormatter";
+import { slugify } from "./slugs";
 
-import { writable, derived } from 'svelte/store';
-import { fetchChanges, fetchViewLatest, fetchViewAtTimestamp, fetchViewAfter, fetchViewBefore } from './couch-api';
-import { formatMsg } from './messageFormatter';
-import { slugify } from './slugs';
-
-
-async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
+async function runFeed(
+  channel: string,
+  since: string,
+  store: Writable<Message[]>,
+  signal: AbortSignal
+) {
   let last_seq = since;
   while (true) {
     try {
       let changes = await fetchChanges(channel, last_seq, signal);
       if (changes.results.length > 0) {
         let newRows = changes.results
-          .map((row: { doc: any }) => row.doc)         // extract just the docs
-          .sort((a, b) => a.timestamp - b.timestamp);  // and sort them, since the _changes feed is not guaranteed to be sorted
-        store.update(rows => rows.concat(newRows));
+          .map((row: { doc: any }) => row.doc) // extract just the docs
+          .sort((a, b) => a.timestamp - b.timestamp); // and sort them, since the _changes feed is not guaranteed to be sorted
+        store.update((rows) => rows.concat(newRows));
       }
       last_seq = changes.last_seq;
     } catch (e) {
@@ -44,7 +56,6 @@ async function runFeed(channel: string, since: string, store: Writable<Message[]
     }
   }
 }
-
 
 export async function getLatest(channel: string, limit = 100): Promise<Page> {
   const controller = new AbortController();
@@ -68,15 +79,18 @@ export async function getLatest(channel: string, limit = 100): Promise<Page> {
       if (first === undefined) return;
       const resp = await fetchViewBefore(channel, first, n);
       first = resp.rows.at(0);
-      store.update(r => resp.rows.concat(r));
+      store.update((r) => resp.rows.concat(r));
     },
     // this page doesn't have the next command
-    next: async (_) => { }
+    next: async (_) => {},
   };
 }
 
-
-export async function getPage(channel: string, timestamp: number, limit: number): Promise<Page> {
+export async function getPage(
+  channel: string,
+  timestamp: number,
+  limit: number
+): Promise<Page> {
   const store = writable([] as Message[]);
   const page = await fetchViewAtTimestamp(channel, timestamp, limit);
   store.set(page.rows);
@@ -91,32 +105,36 @@ export async function getPage(channel: string, timestamp: number, limit: number)
       if (first === undefined) return;
       const resp = await fetchViewBefore(channel, first, n);
       first = resp.rows.at(0);
-      store.update(r => resp.rows.concat(r));
+      store.update((r) => resp.rows.concat(r));
     },
 
     next: async (n: number) => {
       if (last === undefined) return;
       const resp = await fetchViewAfter(channel, last, n);
       last = resp.rows.at(-1);
-      store.update(r => r.concat(resp.rows));
+      store.update((r) => r.concat(resp.rows));
     },
   };
 }
 
-
-export function groupRows(rows: Readable<Message[]>): Readable<Map<string, MessageView[]>> {
-  return derived(rows,
-    $rows => $rows.map(msg2View).reduce(groupByDate, new Map())
-  )
+export function groupRows(
+  rows: Readable<Message[]>
+): Readable<Map<string, MessageView[]>> {
+  return derived(rows, ($rows) =>
+    $rows.map(msg2View).reduce(groupByDate, new Map())
+  );
 }
 
-function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<string, MessageView[]> {
+function groupByDate(
+  acc: Map<string, MessageView[]>,
+  msg: MessageView
+): Map<string, MessageView[]> {
   // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
   acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
   return acc;
 }
 
-function datetime(timestamp: number): { date: string, time: string } {
+function datetime(timestamp: number): { date: string; time: string } {
   // poor mans strftime to ISO 8601
   const date = new Date(timestamp * 1000);
   const YYYY = date.getFullYear().toString().padStart(4, "0");
@@ -134,11 +152,10 @@ function msg2View(msg: Message): MessageView {
     ...datetime(msg.timestamp),
     slug: slugify(Math.trunc(msg.timestamp)),
     html: formatMsg(msg.message),
-  }
+  };
 }
-
 
 // awaitable sleep/setTimeout
 function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }
