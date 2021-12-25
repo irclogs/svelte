@@ -14,7 +14,7 @@ jobs:
       run: yarn
 
     - name: check
-      run: yarn validate
+      run: yarn check
 
     - name: build
       env:
@@ -26,4 +26,4 @@ jobs:
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
-        cname: irc.softver.org.mk        
+        cname: irc.softver.org.mk
