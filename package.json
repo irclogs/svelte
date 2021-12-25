@@ -17,7 +17,7 @@
     "check": "prettier --check src/ && svelte-check --human && tsc --noEmit",
     "build": "vite build",
     "watch": "vite",
-    "prettier": "prettier --check src/",
+    "prettier:check": "prettier --check src/",
     "prettier:fix": "prettier --write src/"
   },
   "browserslist": "> 0.25%, not dead",
