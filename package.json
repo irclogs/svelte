@@ -6,6 +6,7 @@
     "@sveltejs/vite-plugin-svelte": "^1.0.0-next.32",
     "@tsconfig/svelte": "^3.0.0",
     "@types/node": "^17.0.4",
+    "prettier": "^2.5.1",
     "svelte-check": "^2.2.11",
     "svelte-preprocess": "^4.10.1",
     "tslib": "^2.3.1",
@@ -13,9 +14,11 @@
     "vite": "^2.7.6"
   },
   "scripts": {
-    "check": "svelte-check --human && tsc --noEmit",
+    "check": "prettier --check src/ && svelte-check --human && tsc --noEmit",
     "build": "vite build",
-    "watch": "vite"
+    "watch": "vite",
+    "prettier": "prettier --check src/",
+    "prettier:fix": "prettier --write src/"
   },
   "browserslist": "> 0.25%, not dead",
   "dependencies": {
