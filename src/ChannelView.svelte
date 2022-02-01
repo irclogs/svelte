@@ -30,7 +30,7 @@
       {#each $grouppedRows.get(group) ?? [] as doc (doc._id)}
         <tr>
           <td>
-            <span class="nick" style={colorize(doc.sender)}>{doc.sender}</span>
+            <span class="nick" style:background-color={colorize(doc.sender)}>{doc.sender}</span>
             <span use:embed={doc.html} class="message-text" />
           </td>
           <td class="timestamp">

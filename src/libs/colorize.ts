@@ -20,5 +20,5 @@ export function toCssColor(hash: number): string {
 
 export function colorize(nickname: string): string {
   const color = toCssColor(one_at_a_time_hash(nickname));
-  return `background-color: ${color};`;
+  return color;
 }
