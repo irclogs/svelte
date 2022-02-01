@@ -1,9 +1,9 @@
 <script>
-  import { version } from '../package.json';
+  import { version } from "../package.json";
   let online;
 </script>
 
-<svelte:window bind:online={online}/>
+<svelte:window bind:online />
 <footer class:offline={!online}>
   <a href="https://irc.softver.org.mk/">irclog home page</a> | ver: {version}
 </footer>
