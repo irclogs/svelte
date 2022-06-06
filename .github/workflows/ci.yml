@@ -13,12 +13,12 @@ jobs:
       run: yarn
 
     - name: check
-      run: yarn check
+      run: yarn run check
 
     - name: build
       env:
         NODE_ENV: production
-      run: yarn build
+      run: yarn run build
 
     - name: deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
