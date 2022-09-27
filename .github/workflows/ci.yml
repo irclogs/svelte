@@ -7,22 +7,22 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
-    - name: install
+    - name: install dependencies
       run: yarn
 
     - name: check
       run: yarn run check
 
-    - name: build
+    - name: build production deploy artifacts
       env:
         NODE_ENV: production
       run: yarn run build
 
     - name: deploy to gh-pages
       uses: peaceiris/actions-gh-pages@v3
-      if: github.ref == 'refs/heads/main'
+      if: github.ref_name == 'main'
       with:
         github_token: ${{ secrets.GITHUB_TOKEN }}
         publish_dir: ./dist
