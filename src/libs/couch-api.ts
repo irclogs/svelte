@@ -26,8 +26,7 @@ export interface ChangesResponse {
   last_seq: string;
 }
 
-import { getEnv } from "../environments";
-const CouchURL = new URL(getEnv().CouchURL);
+const CouchURL = new URL(import.meta.env.VITE_COUCHDB_URL);
 
 const commonQueryArgs = {
   include_docs: true,

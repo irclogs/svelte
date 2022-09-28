@@ -7,10 +7,9 @@
   import Button from "./PaginationButton.svelte";
   import { getPage } from "./libs/couch";
   import { oportunisticParsePemalink } from "./libs/slugs";
-  import { getEnv } from "./environments";
 
   export let params: { channel: string; permalink: string };
-  const pageSize = getEnv().pageSize;
+  const pageSize = import.meta.env.VITE_IRCLOG_PAGE_SIZE;
 
   async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);

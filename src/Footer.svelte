@@ -5,7 +5,8 @@
 
 <svelte:window bind:online />
 <footer class:offline={!online}>
-  <a href="https://irc.softver.org.mk/">irclog home page</a> | ver: {version}
+  <a href="https://irc.softver.org.mk/">irclog home page</a> |
+  ver: <abbr title="{import.meta.env.VITE_GITHUB_ARCHIVE_URL}">{version}</abbr>
 </footer>
 
 <style>
