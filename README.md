@@ -16,9 +16,9 @@ Run `yarn` and `yarn dev`.
 > The public server has localhost:8000 allowed for CORS requests, so running on port 8000
 > will make the api available
 
-## Production
+## Production build
 
 ```
-yarn build
+yarn build --mode production
 ```
-the release is in `./dist`
+the release files are in `./dist`
