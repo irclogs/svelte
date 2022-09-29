@@ -13,8 +13,8 @@ in couchdb attachments.
 
 Run `yarn` and `yarn dev`.
 
-> The public server has localhost:8000 allowed for CORS requests, so running on port 8000
-> will make the api available
+> The public database server has localhost:8000 allowed for CORS requests, so running this app on port 8000
+> will make the api available. Run `yarn watch --mode test` to use a couchdb on localhost (see .env.test).
 
 ## Production build
 
