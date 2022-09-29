@@ -4,6 +4,6 @@ import preprocess from "svelte-preprocess";
 
 export default defineConfig({
   plugins: [svelte({ preprocess: preprocess() })],
-  server: { port: 8000 },
+  server: { port: process.env.npm_package_config_port },
   build: { sourcemap: true },
 });
