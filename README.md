@@ -22,3 +22,9 @@ Run `yarn` and `yarn dev`.
 yarn build --mode production
 ```
 the release asset files are in `./dist`.
+
+## License
+
+All files licensed under the Apache-2.0 license (see `LICENSE`),
+except for `src/libs/ansi.js`, taken from the [gamja project](https://sr.ht/~emersion/gamja/),
+which is licensed under the AGPL-3.0 (see `LICENSE.AGPL`)
