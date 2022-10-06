@@ -1,6 +1,7 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
+    "outDir": "_build",
     "target": "ESNext",
     "module": "ESNext",
     "useDefineForClassFields": true,
