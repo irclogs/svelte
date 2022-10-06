@@ -1,10 +1,11 @@
+import { strip as stripAnsi } from "./ansi";
 import * as linkifyjs from "linkifyjs";
 linkifyjs.options.defaults.defaultProtocol = "https";
 
 function codify(s: string): Node[] {
   const re = new RegExp("`.*?`", "g");
   let out = [];
-  let match;
+  let match: RegExpExecArray;
   let last = 0;
   while ((match = re.exec(s))) {
     let prefix = s.slice(last, match.index);
@@ -49,7 +50,8 @@ function linkify(text: string): Node[] {
 }
 
 export function formatMsg(msg: string): Node[] {
-  return codify(msg).flatMap((n) =>
+  const msg_ = stripAnsi(msg);
+  return codify(msg_).flatMap((n) =>
     n instanceof Text ? linkify(n.textContent ?? "") : n
   );
 }
