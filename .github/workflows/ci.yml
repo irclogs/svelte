@@ -19,7 +19,6 @@ jobs:
 
     - name: build production deploy artifacts
       env:
-        NODE_ENV: production
         VITE_GITHUB_ARCHIVE_URL: ${{ github.server_url }}/${{ github.repository }}/archive/${{ github.sha }}.zip
       run: yarn run build --mode production
 
