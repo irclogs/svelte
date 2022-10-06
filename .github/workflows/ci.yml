@@ -20,7 +20,7 @@ jobs:
     - name: build production deploy artifacts
       env:
         NODE_ENV: production
-        VITE_GITHUB_ARCHIVE_URL: ${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}/archive/${GITHUB_SHA}.zip
+        VITE_GITHUB_ARCHIVE_URL: ${{ github.server_url }}/${{ github.repository }}/archive/${{ github.sha }}.zip
       run: yarn run build --mode production
 
     - name: deploy to gh-pages
