@@ -11,8 +11,24 @@ const COLOR_HEX = "\x04";
 const REVERSE_COLOR = "\x16";
 const RESET = "\x0F";
 
+const HEX_COLOR_LENGTH = 6;
+
 function isDigit(ch) {
 	return ch >= "0" && ch <= "9";
+}
+
+function isHexColor(text) {
+	if (text.length < HEX_COLOR_LENGTH) {
+		return false;
+	}
+	for (let i = 0; i < HEX_COLOR_LENGTH; i++) {
+		let ch = text[i].toUpperCase();
+		let ok = (ch >= "0" && ch <= "9") || (ch >= "A" && ch <= "F");
+		if (!ok) {
+			return false;
+		}
+	}
+	return true;
 }
 
 export function strip(text) {
@@ -44,7 +60,13 @@ export function strip(text) {
 			}
 			break;
 		case COLOR_HEX:
-			i += 6;
+			if (!isHexColor(text.slice(i + 1))) {
+				break;
+			}
+			i += HEX_COLOR_LENGTH;
+			if (text[i + 1] == "," && isHexColor(text.slice(i + 2))) {
+				i += 1 + HEX_COLOR_LENGTH;
+			}
 			break;
 		default:
 			out += ch;
