@@ -8,7 +8,7 @@
     "port": "8000"
   },
   "scripts": {
-    "check": "prettier --check src/ && svelte-check --human --tsconfig ./tsconfig.json && tsc --noEmit",
+    "check:all": "prettier --check src/ && svelte-check --human --tsconfig ./tsconfig.json && tsc --noEmit",
     "build": "vite build",
     "dev": "vite",
     "preview": "vite preview",
