@@ -15,8 +15,9 @@ jobs:
     - name: install dependencies
       run: yarn
 
-    - name: check
-      run: yarn run check
+    - run: yarn tsc
+    - run: yarn svelte-check --human --tsconfig ./tsconfig.json
+    - run: yarn prettier:check
 
     - name: build production deploy artifacts
       env:
