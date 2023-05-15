@@ -19,7 +19,7 @@ Run `yarn` and `yarn dev`.
 ## Production build
 
 ```
-yarn build --mode production
+yarn build:production
 ```
 the release asset files are in `./dist`.
 

@@ -15,13 +15,14 @@ jobs:
     - name: install dependencies
       run: yarn
 
-    - name: check
-      run: yarn run check
+    - run: yarn prettier:check
+    - run: yarn svelte-check
+    - run: yarn tsc
 
     - name: build production deploy artifacts
       env:
         VITE_GITHUB_ARCHIVE_URL: ${{ github.server_url }}/${{ github.repository }}/archive/${{ github.sha }}.zip
-      run: yarn run build --mode production
+      run: yarn build:production
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1
