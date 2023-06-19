@@ -23,7 +23,6 @@
     "@types/node": "^20.2.5",
     "prettier": "^2.8.8",
     "svelte-check": "^3.4.3",
-    "svelte-preprocess": "^5.0.4",
     "tslib": "^2.5.3",
     "typescript": "^5.1.3",
     "vite": "^4.3.9"
@@ -31,7 +30,7 @@
   "dependencies": {
     "hashids": "^2.3.0",
     "linkifyjs": "^4.1.1",
-    "svelte": "4.0.0-next.1",
+    "svelte": "4.0.0-next.2",
     "svelte-spa-router": "^3.3.0"
   },
   "packageManager": "pnpm@latest"
