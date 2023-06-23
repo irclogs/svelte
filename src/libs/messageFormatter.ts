@@ -5,7 +5,7 @@ linkifyjs.options.defaults.defaultProtocol = "https";
 function codify(s: string): Node[] {
   const re = new RegExp("`.*?`", "g");
   let out = [];
-  let match: RegExpExecArray;
+  let match: RegExpExecArray | null;
   let last = 0;
   while ((match = re.exec(s))) {
     let prefix = s.slice(last, match.index);
