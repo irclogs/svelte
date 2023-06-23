@@ -12,17 +12,18 @@ jobs:
     steps:
     - uses: actions/checkout@v3
 
-    - name: install dependencies
-      run: yarn
+    - uses: pnpm/action-setup@v2
+      with:
+        run_install: true
 
-    - run: yarn prettier:check
-    - run: yarn svelte-check
-    - run: yarn tsc
+    - run: pnpm prettier:check
+    - run: pnpm svelte-check
+    - run: pnpm tsc
 
     - name: build production deploy artifacts
       env:
         VITE_GITHUB_ARCHIVE_URL: ${{ github.server_url }}/${{ github.repository }}/archive/${{ github.sha }}.zip
-      run: yarn build:production
+      run: pnpm build:production
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1

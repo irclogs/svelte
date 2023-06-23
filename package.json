@@ -33,5 +33,6 @@
     "linkifyjs": "^4.1.1",
     "svelte": "^3.59.1",
     "svelte-spa-router": "^3.3.0"
-  }
+  },
+  "packageManager": "pnpm@latest"
 }
