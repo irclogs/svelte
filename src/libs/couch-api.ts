@@ -36,7 +36,7 @@ const commonQueryArgs = {
 
 export async function fetchViewLatest(
   channel: string,
-  limit = 100
+  limit = 100,
 ): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
@@ -55,7 +55,7 @@ export async function fetchViewLatest(
 export async function fetchViewAtTimestamp(
   channel: string,
   timestamp: number,
-  limit: number
+  limit: number,
 ): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
@@ -73,7 +73,7 @@ export async function fetchViewAtTimestamp(
 export async function fetchViewBefore(
   channel: string,
   firstRow: Message,
-  limit: number
+  limit: number,
 ): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
@@ -94,7 +94,7 @@ export async function fetchViewBefore(
 export async function fetchViewAfter(
   channel: string,
   lastRow: Message,
-  limit: number
+  limit: number,
 ): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
@@ -132,7 +132,7 @@ function extractChannelData(row: { key: [string]; value: number }): {
 export async function fetchChanges(
   channel: string,
   since: string,
-  signal?: AbortSignal
+  signal?: AbortSignal,
 ): Promise<ChangesResponse> {
   const feedUrl = new URL("_changes", CouchURL);
   const query = {

@@ -36,7 +36,7 @@ async function runFeed(
   channel: string,
   since: string,
   store: Writable<Message[]>,
-  signal: AbortSignal
+  signal: AbortSignal,
 ) {
   let last_seq = since;
   while (true) {
@@ -89,7 +89,7 @@ export async function getLatest(channel: string, limit = 100): Promise<Page> {
 export async function getPage(
   channel: string,
   timestamp: number,
-  limit: number
+  limit: number,
 ): Promise<Page> {
   const store = writable([] as Message[]);
   const page = await fetchViewAtTimestamp(channel, timestamp, limit);
@@ -118,16 +118,16 @@ export async function getPage(
 }
 
 export function groupRows(
-  rows: Readable<Message[]>
+  rows: Readable<Message[]>,
 ): Readable<Map<string, MessageView[]>> {
   return derived(rows, ($rows) =>
-    $rows.map(msg2View).reduce(groupByDate, new Map())
+    $rows.map(msg2View).reduce(groupByDate, new Map()),
   );
 }
 
 function groupByDate(
   acc: Map<string, MessageView[]>,
-  msg: MessageView
+  msg: MessageView,
 ): Map<string, MessageView[]> {
   // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
   acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
