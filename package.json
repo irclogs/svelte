@@ -19,18 +19,18 @@
   "browserslist": "> 0.25%, not dead",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^2.4.2",
-    "@tsconfig/svelte": "^4.0.1",
-    "@types/node": "^20.3.1",
-    "prettier": "^2.8.8",
-    "svelte-check": "^3.4.4",
-    "tslib": "^2.5.3",
-    "typescript": "^5.1.3",
-    "vite": "^4.3.9"
+    "@tsconfig/svelte": "^5.0.0",
+    "@types/node": "^20.4.2",
+    "prettier": "^3.0.0",
+    "svelte-check": "^3.4.6",
+    "tslib": "^2.6.0",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.4"
   },
   "dependencies": {
     "hashids": "^2.3.0",
     "linkifyjs": "^4.1.1",
-    "svelte": "^4.0.0",
+    "svelte": "^4.0.5",
     "svelte-spa-router": "^3.3.0"
   },
   "packageManager": "pnpm@latest"
