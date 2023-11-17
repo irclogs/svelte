@@ -1,3 +1,7 @@
+<svelte:head><title>404 Not found!</title></svelte:head>
+
+<div class="outer"><div class="inner">404 Not found!</div></div>
+
 <style>
   div.outer {
     width: 100%;
@@ -13,7 +17,3 @@
     color: #9e9e9e;
   }
 </style>
-
-<svelte:head><title>404 Not found!</title></svelte:head>
-
-<div class="outer"><div class="inner">404 Not found!</div></div>

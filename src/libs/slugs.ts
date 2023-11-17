@@ -1,10 +1,7 @@
 import Hashids from "hashids";
 
 // changing the salt will invalidate all permalinks
-const hashids = new Hashids(
-  "Never change me in the lifetime of this application.",
-  3,
-);
+const hashids = new Hashids("Never change me in the lifetime of this application.", 3);
 export const slugify = hashids.encode.bind(hashids);
 
 /*

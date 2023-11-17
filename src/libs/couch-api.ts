@@ -34,10 +34,7 @@ const commonQueryArgs = {
   reduce: false,
 };
 
-export async function fetchViewLatest(
-  channel: string,
-  limit = 100,
-): Promise<ViewResponse> {
+export async function fetchViewLatest(channel: string, limit = 100): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
@@ -52,11 +49,7 @@ export async function fetchViewLatest(
   return page;
 }
 
-export async function fetchViewAtTimestamp(
-  channel: string,
-  timestamp: number,
-  limit: number,
-): Promise<ViewResponse> {
+export async function fetchViewAtTimestamp(channel: string, timestamp: number, limit: number): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
@@ -70,11 +63,7 @@ export async function fetchViewAtTimestamp(
   return page;
 }
 
-export async function fetchViewBefore(
-  channel: string,
-  firstRow: Message,
-  limit: number,
-): Promise<ViewResponse> {
+export async function fetchViewBefore(channel: string, firstRow: Message, limit: number): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
@@ -91,11 +80,7 @@ export async function fetchViewBefore(
   return view;
 }
 
-export async function fetchViewAfter(
-  channel: string,
-  lastRow: Message,
-  limit: number,
-): Promise<ViewResponse> {
+export async function fetchViewAfter(channel: string, lastRow: Message, limit: number): Promise<ViewResponse> {
   const query = {
     ...commonQueryArgs,
     limit: limit,
@@ -129,11 +114,7 @@ function extractChannelData(row: { key: [string]; value: number }): {
   return { name: row.key[0], total_messages: row.value };
 }
 
-export async function fetchChanges(
-  channel: string,
-  since: string,
-  signal?: AbortSignal,
-): Promise<ChangesResponse> {
+export async function fetchChanges(channel: string, since: string, signal?: AbortSignal): Promise<ChangesResponse> {
   const feedUrl = new URL("_changes", CouchURL);
   const query = {
     feed: "longpoll",
