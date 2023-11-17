@@ -1,5 +1,5 @@
 <script lang="ts">
-  export let onClick: (ev:Event) => Promise<void>;
+  export let onClick: (ev: Event) => Promise<void>;
   let disabled = false;
 
   async function handleClick(ev: Event) {
@@ -10,8 +10,8 @@
 </script>
 
 <div class={$$props.class}>
-  <button on:click|stopPropagation={ handleClick } {disabled} class:disabled>
-    <slot/>
+  <button on:click|stopPropagation={handleClick} {disabled} class:disabled>
+    <slot />
   </button>
 </div>
 
@@ -44,8 +44,14 @@
   }
 
   @keyframes glowing {
-    0% { box-shadow: 0 0 0 #0068ad; }
-    50% { box-shadow: 0 0 30px #0068ad; }
-    100% { box-shadow: 0 0 0 #0068ad; }
+    0% {
+      box-shadow: 0 0 0 #0068ad;
+    }
+    50% {
+      box-shadow: 0 0 30px #0068ad;
+    }
+    100% {
+      box-shadow: 0 0 0 #0068ad;
+    }
   }
 </style>

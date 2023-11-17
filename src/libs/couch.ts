@@ -22,22 +22,11 @@ export interface Page extends Readable<Message[]> {
 }
 
 import { writable, derived } from "svelte/store";
-import {
-  fetchChanges,
-  fetchViewLatest,
-  fetchViewAtTimestamp,
-  fetchViewAfter,
-  fetchViewBefore,
-} from "./couch-api";
+import { fetchChanges, fetchViewLatest, fetchViewAtTimestamp, fetchViewAfter, fetchViewBefore } from "./couch-api";
 import { formatMsg } from "./messageFormatter";
 import { slugify } from "./slugs";
 
-async function runFeed(
-  channel: string,
-  since: string,
-  store: Writable<Message[]>,
-  signal: AbortSignal,
-) {
+async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
   let last_seq = since;
   while (true) {
     try {
@@ -86,11 +75,7 @@ export async function getLatest(channel: string, limit = 100): Promise<Page> {
   };
 }
 
-export async function getPage(
-  channel: string,
-  timestamp: number,
-  limit: number,
-): Promise<Page> {
+export async function getPage(channel: string, timestamp: number, limit: number): Promise<Page> {
   const store = writable([] as Message[]);
   const page = await fetchViewAtTimestamp(channel, timestamp, limit);
   store.set(page.rows);
@@ -117,18 +102,11 @@ export async function getPage(
   };
 }
 
-export function groupRows(
-  rows: Readable<Message[]>,
-): Readable<Map<string, MessageView[]>> {
-  return derived(rows, ($rows) =>
-    $rows.map(msg2View).reduce(groupByDate, new Map()),
-  );
+export function groupRows(rows: Readable<Message[]>): Readable<Map<string, MessageView[]>> {
+  return derived(rows, ($rows) => $rows.map(msg2View).reduce(groupByDate, new Map()));
 }
 
-function groupByDate(
-  acc: Map<string, MessageView[]>,
-  msg: MessageView,
-): Map<string, MessageView[]> {
+function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<string, MessageView[]> {
   // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
   acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
   return acc;

@@ -51,7 +51,5 @@ function linkify(text: string): Node[] {
 
 export function formatMsg(msg: string): Node[] {
   const msg_ = stripAnsi(msg);
-  return codify(msg_).flatMap((n) =>
-    n instanceof Text ? linkify(n.textContent ?? "") : n,
-  );
+  return codify(msg_).flatMap((n) => (n instanceof Text ? linkify(n.textContent ?? "") : n));
 }

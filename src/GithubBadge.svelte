@@ -1,3 +1,7 @@
+<a href="https://github.com/irclogs/svelte">
+  <img src="./img/green-black.png" alt="Fork me on GitHub" />
+</a>
+
 <style>
   a {
     position: absolute;
@@ -6,9 +10,3 @@
     border: 0;
   }
 </style>
-
-<a href="https://github.com/irclogs/svelte">
-<img
-    src="./img/green-black.png"
-    alt="Fork me on GitHub" />
-</a>
