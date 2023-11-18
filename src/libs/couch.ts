@@ -102,8 +102,8 @@ export async function getPage(channel: string, timestamp: number, limit: number)
   };
 }
 
-export function groupRows(rows: Readable<Message[]>): Readable<Map<string, MessageView[]>> {
-  return derived(rows, ($rows) => $rows.map(msg2View).reduce(groupByDate, new Map()));
+export function groupRows(rows: Message[]) {
+  return $derived(rows.map(msg2View).reduce(groupByDate, new Map()));
 }
 
 function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<string, MessageView[]> {
