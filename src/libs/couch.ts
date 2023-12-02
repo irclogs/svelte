@@ -9,16 +9,17 @@ import type { Readable, Writable } from "svelte/store";
 import type { Message } from "./couch-api";
 export type { Message };
 
-export interface MessageView extends Message {
+export type MessageView = {
   date: string;
   time: string;
   slug: string;
   html: Node[];
-}
+} & Message;
 
-export interface Page extends Readable<Message[]> {
+export type Page = {
   prev: (arg0: number) => Promise<void>;
   next: (arg0: number) => Promise<void>;
+  rows: Message[];
 }
 
 import { writable, derived } from "svelte/store";
