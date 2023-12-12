@@ -1,5 +1,3 @@
-import { beforeUpdate, afterUpdate } from "svelte";
-
 /**
  * Initialize the autoscroller. Needs to be called in the context of a component because it'll
  * hook into the components beforeUpdate/afterUpdate.
@@ -12,14 +10,13 @@ import { beforeUpdate, afterUpdate } from "svelte";
  * and the other is that we scroll the whole document body.
  * These should probably be made configurable in the future.
  *
- * @export
  */
 export function autoscroll_init() {
   let do_scroll = false;
   let prevHeight = document.body.scrollHeight;
   let footer = document.querySelector("footer");
 
-  beforeUpdate(() => {
+  $effect.pre(() => {
     // autoscroll only if the footer is visible
     let footerTop = footer?.offsetTop ?? document.body.scrollHeight;
     do_scroll = window.scrollY + window.innerHeight >= footerTop;
@@ -27,7 +24,7 @@ export function autoscroll_init() {
     prevHeight = document.body.scrollHeight;
   });
 
-  afterUpdate(() => {
+  $effect(() => {
     if (do_scroll) {
       let scrollDiff = document.body.scrollHeight - prevHeight;
       window.scrollBy({ behavior: "smooth", top: scrollDiff });
