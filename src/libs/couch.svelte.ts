@@ -5,7 +5,6 @@
  *
  */
 
-import type { Readable, Writable } from "svelte/store";
 import type { Message } from "./couch-api";
 export type { Message };
 
@@ -22,21 +21,20 @@ export type Page = {
   rows: Message[];
 }
 
-import { writable, derived } from "svelte/store";
 import { fetchChanges, fetchViewLatest, fetchViewAtTimestamp, fetchViewAfter, fetchViewBefore } from "./couch-api";
 import { formatMsg } from "./messageFormatter";
 import { slugify } from "./slugs";
 
-async function runFeed(channel: string, since: string, store: Writable<Message[]>, signal: AbortSignal) {
+async function runFeed(channel: string, since: string, rows: Message[], signal: AbortSignal) {
   let last_seq = since;
   while (true) {
     try {
       let changes = await fetchChanges(channel, last_seq, signal);
       if (changes.results.length > 0) {
         let newRows = changes.results
-          .map((row: { doc: any }) => row.doc) // extract just the docs
+          .map((row: { doc: Message }) => row.doc) // extract just the docs
           .sort((a, b) => a.timestamp - b.timestamp); // and sort them, since the _changes feed is not guaranteed to be sorted
-        store.update((rows) => rows.concat(newRows));
+        rows = [...rows, ...newRows];
       }
       last_seq = changes.last_seq;
     } catch (e) {
@@ -49,62 +47,72 @@ async function runFeed(channel: string, since: string, store: Writable<Message[]
 
 export async function getLatest(channel: string, limit = 100): Promise<Page> {
   const controller = new AbortController();
-  const store = writable([] as Message[], () => {
-    return () => controller.abort(); // no more subscribers
-  });
+  let rows = $state<Message[]>([]);
+  // FIXME: if state is dropped abort the fetch/longpoll
+  //   return () => controller.abort(); // no more subscribers
+  // });
 
   const page = await fetchViewLatest(channel, limit);
-  store.set(page.rows);
+  rows = page.rows;
 
   // this is an async function, but we don't await on it here
   // we let it run unhinged, controlled by the signal, and output going to the store
-  runFeed(channel, page.update_seq, store, controller.signal);
+  // runFeed(channel, page.update_seq, rows, controller.signal);
 
   // internal mutable state
-  let first = page.rows.at(0);
+  // let first = page.rows.at(0);
   return {
-    subscribe: store.subscribe,
+    get rows() { return rows },
 
-    prev: async (n: number) => {
-      if (first === undefined) return;
-      const resp = await fetchViewBefore(channel, first, n);
-      first = resp.rows.at(0);
-      store.update((r) => resp.rows.concat(r));
+    async prev (n: number) {
+      // if (first === undefined) return;
+      // const resp = await fetchViewBefore(channel, first, n);
+      // first = resp.rows.at(0);
+      // rows = resp.rows.concat(rows);
     },
     // this page doesn't have the next command
-    next: async (_) => {},
+    async next () {},
   };
 }
 
 export async function getPage(channel: string, timestamp: number, limit: number): Promise<Page> {
-  const store = writable([] as Message[]);
+  let rows = $state<Message[]>([]);
   const page = await fetchViewAtTimestamp(channel, timestamp, limit);
-  store.set(page.rows);
+  rows = page.rows;
 
   // internal mutable state
   let first = page.rows.at(0);
   let last = page.rows.at(-1);
   return {
-    subscribe: store.subscribe,
+    get rows() { return rows },
 
     prev: async (n: number) => {
       if (first === undefined) return;
       const resp = await fetchViewBefore(channel, first, n);
       first = resp.rows.at(0);
-      store.update((r) => resp.rows.concat(r));
+      rows = resp.rows.concat(rows);
     },
 
     next: async (n: number) => {
       if (last === undefined) return;
       const resp = await fetchViewAfter(channel, last, n);
       last = resp.rows.at(-1);
-      store.update((r) => r.concat(resp.rows));
+      rows = rows.concat(resp.rows);
     },
   };
 }
 
-export function groupRows(rows: Message[]) {
-  return $derived(rows.map(msg2View).reduce(groupByDate, new Map()));
+// Given the list of all messages, groupBy the message timestamp, where groups are per-day (YYYY-MM-dd)
+export function groupRows(rows: Readonly<Message[]>): Map<string, MessageView[]> {
+  const m = new Map<string, MessageView[]>();
+  m.set("YYYY-DD-MM",
+    rows.map(msg2View)
+  )
+  return m;
+
+  const rows_ = rows.map(msg2View);
+  // return Map.groupBy(rows_, ({date}) => {return date})
+  return rows_.reduce(groupByDate, new Map());
 }
 
 function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<string, MessageView[]> {
