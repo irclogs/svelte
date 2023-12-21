@@ -9,7 +9,7 @@
   import { oportunisticParsePemalink } from "./libs/slugs";
 
   export let params: { channel: string; permalink: string };
-  const pageSize = import.meta.env.VITE_IRCLOG_PAGE_SIZE;
+  const pageSize = parseInt(import.meta.env.VITE_IRCLOG_PAGING_SIZE);
 
   async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
