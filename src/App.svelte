@@ -12,12 +12,13 @@
 <main>
   {#if Router.hash == "/"}
     <IndexPage />
-  {:else if Router.hash == "/404" }
+  {:else if Router.hash == "/404"}
     <NotFound />
   {:else if Router.hash.match(/^\/[^/]+$/)}
     <ChannelHome channel={Router.hash.slice(1)} />
   {:else if Router.hash.match(/^\/[^/]+\/[^/]+$/)}
-    <ChannelPageAt channel={Router.hash} permalink={Router.hash} />
+    {@const [_, channel, permalink] = Router.hash.split("/")}
+    <ChannelPageAt {channel} {permalink} />
   {:else}
     <NotFound />
   {/if}

@@ -3,20 +3,22 @@
   import Table from "./ChannelView.svelte";
   import PageLoader from "./spinners/PageLoader.svelte";
   import Button from "./PaginationButton.svelte";
-  import { getLatest } from "./libs/couch";
+  import { getLatest } from "./libs/couch.svelte";
+  import { config } from "./libs/config";
 
-  export let params: { channel: string };
+  type Props = { channel: string };
+  let { channel }: Props = $props();
 </script>
 
-<svelte:head><title>irc logs for #{params.channel}</title></svelte:head>
+<svelte:head><title>irc logs for #{channel}</title></svelte:head>
 
-<Header><a href="#/">irc logs</a> for #{params.channel}</Header>
+<Header><a href="#/">irc logs</a> for #{channel}</Header>
 
-{#await getLatest(params.channel, 100)}
+{#await getLatest(channel, config.indexPageSize)}
   <PageLoader />
 {:then livePage}
-  <Button onClick={() => livePage.prev(50)}>back</Button>
-  <Table rows={livePage} channel={params.channel} autoscroll={true} />
+  <Button onclick={() => livePage.prev(config.pageSize)}>back</Button>
+  <Table rows={livePage.rows} {channel} />
 
   <div class="feed">…waiting for updates…</div>
 {:catch error}

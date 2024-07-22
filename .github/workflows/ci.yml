@@ -10,9 +10,9 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: pnpm/action-setup@v2
+    - uses: pnpm/action-setup@v4
       with:
         run_install: true
 
@@ -23,7 +23,9 @@ jobs:
     - name: build production deploy artifacts
       env:
         VITE_GITHUB_ARCHIVE_URL: ${{ github.server_url }}/${{ github.repository }}/archive/${{ github.sha }}.zip
-      run: pnpm build:production
+      run: |
+        export VITE_VERSION=`date +%Y-%m-%d`
+        pnpm build:production
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v1

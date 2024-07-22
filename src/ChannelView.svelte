@@ -1,18 +1,34 @@
 <script lang="ts">
   import { colorize } from "./libs/colorize";
-  import { autoscroll_init } from "./libs/autoscroll";
-  import { groupRows } from "./libs/couch";
-  import type { Message } from "./libs/couch";
+  import { groupRows } from "./libs/couch.svelte";
+  import type { Message } from "./libs/couch.svelte";
+  import { tick } from "svelte";
 
-  export let channel: string;
-  export let rows: SvelteStore<Message[]>;
-  export let autoscroll = false;
+  type Props = {
+    channel: string;
+    rows: Message[];
+  };
+  let { channel, rows }: Props = $props();
+  let grouppedRows = $derived(groupRows(rows));
 
-  let grouppedRows = groupRows(rows);
+  const footer = document.querySelector("footer");
 
-  if (autoscroll) {
-    autoscroll_init();
-  }
+  $effect.pre(() => {
+    grouppedRows;
+    // autoscroll only if the footer is visible
+    const footerTop = footer?.offsetTop ?? document.body.scrollHeight;
+    const do_scroll = window.scrollY + window.innerHeight >= footerTop;
+
+    const prevHeight = document.body.scrollHeight;
+    //console.log("$effect.pre", do_scroll, prevHeight, window.scrollY, window.innerHeight, footer?.offsetTop);
+    if (do_scroll) {
+      tick().then(() => {
+        let scrollDiff = document.body.scrollHeight - prevHeight;
+        window.scrollBy({ behavior: "smooth", top: scrollDiff });
+        //console.log("scrollDiff", scrollDiff);
+      });
+    }
+  });
 
   function embed(node: HTMLSpanElement, nodes: Node[]) {
     node.replaceChildren(...nodes);
@@ -20,21 +36,21 @@
 </script>
 
 <table>
-  {#each [...$grouppedRows.keys()] as group}
+  {#each [...grouppedRows.keys()] as group}
     <tbody>
       <tr>
         <th colspan="2" class="group">
           <a class="permalink" href="#/{channel}/{group}" id={group}>{group}</a>
         </th>
       </tr>
-      {#each $grouppedRows.get(group) ?? [] as doc (doc._id)}
+      {#each grouppedRows.get(group) ?? [] as msg (msg._id)}
         <tr>
           <td>
-            <span class="nick" style:background-color={colorize(doc.sender)}>{doc.sender}</span>
-            <span use:embed={doc.html} class="message-text" />
+            <span class="nick" style:background-color={colorize(msg.sender)}>{msg.sender}</span>
+            <span class="message-text" use:embed={msg.html}></span>
           </td>
           <td class="timestamp">
-            <a class="permalink" href="#/{channel}/{doc.slug}" id={doc.slug}>{doc.time}</a>
+            <a class="permalink" href="#/{channel}/{msg.slug}" id={msg.slug}>{msg.time}</a>
           </td>
         </tr>
       {/each}

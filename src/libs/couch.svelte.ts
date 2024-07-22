@@ -5,73 +5,104 @@
  *
  */
 
+import { tick } from "svelte";
 import type { Message } from "./couch-api";
 export type { Message };
 
-export type MessageView = {
+type MessageView = {
+  _id: string;
+  sender: string;
   date: string;
   time: string;
   slug: string;
   html: Node[];
-} & Message;
+};
 
-export type Page = {
+type Page = {
   prev: (arg0: number) => Promise<void>;
   next: (arg0: number) => Promise<void>;
   rows: Message[];
-}
+};
 
-import { fetchChanges, fetchViewLatest, fetchViewAtTimestamp, fetchViewAfter, fetchViewBefore } from "./couch-api";
+import {
+  fetchChanges,
+  fetchViewLatest,
+  fetchViewAtTimestamp,
+  fetchViewAfter,
+  fetchViewBefore,
+  genChanges,
+} from "./couch-api";
 import { formatMsg } from "./messageFormatter";
 import { slugify } from "./slugs";
 
-async function runFeed(channel: string, since: string, rows: Message[], signal: AbortSignal) {
-  let last_seq = since;
-  while (true) {
-    try {
-      let changes = await fetchChanges(channel, last_seq, signal);
-      if (changes.results.length > 0) {
-        let newRows = changes.results
-          .map((row: { doc: Message }) => row.doc) // extract just the docs
-          .sort((a, b) => a.timestamp - b.timestamp); // and sort them, since the _changes feed is not guaranteed to be sorted
-        rows = [...rows, ...newRows];
-      }
-      last_seq = changes.last_seq;
-    } catch (e) {
-      if (signal.aborted) return; // expected exception, quit!
-      console.log("fetchChanges errored:", e, "… retrying in 15s");
-      await sleep(15_000);
+/**
+ * async task running continuously until the abort signal is flaged and updates the `rows` $state
+ *
+ * @param channel
+ * @param since
+ * @param signal
+ */
+function runFeed(channel: string, since: string, signal: AbortSignal) {
+  let rows = $state<Message[]>([]);
+
+  // run forever until aborted
+  (async () => {
+    for await (const values of genChanges(channel, since, signal)) {
+      const newRows = values
+        .map((row: { doc: Message }) => row.doc) // extract just the docs
+        .sort((a, b) => a.timestamp - b.timestamp); // and sort them, since the _changes feed is not guaranteed to be sorted
+      rows = [...rows, ...newRows];
     }
-  }
+  })();
+
+  return {
+    get rows() {
+      return rows;
+    },
+  };
 }
 
 export async function getLatest(channel: string, limit = 100): Promise<Page> {
   const controller = new AbortController();
-  let rows = $state<Message[]>([]);
-  // FIXME: if state is dropped abort the fetch/longpoll
-  //   return () => controller.abort(); // no more subscribers
-  // });
+  let subscribers = 0;
 
   const page = await fetchViewLatest(channel, limit);
-  rows = page.rows;
+  // internal mutable state for the pagination
+  let first = page.rows.at(0);
 
-  // this is an async function, but we don't await on it here
-  // we let it run unhinged, controlled by the signal, and output going to the store
-  // runFeed(channel, page.update_seq, rows, controller.signal);
+  let rows = $state<Message[]>(page.rows);
+  const feed = runFeed(channel, page.update_seq, controller.signal);
 
-  // internal mutable state
-  // let first = page.rows.at(0);
+  const combined = $derived([...rows, ...feed.rows]);
+
   return {
-    get rows() { return rows },
+    get rows() {
+      if ($effect.tracking()) {
+        $effect(() => {
+          //console.log($host());
+          subscribers++;
+          return () => {
+            tick().then(() => {
+              if (--subscribers === 0) {
+                console.log("No more component/state subscribers. abort the changes feed connection");
+                controller.abort();
+              }
+            });
+          };
+        });
+      }
 
-    async prev (n: number) {
-      // if (first === undefined) return;
-      // const resp = await fetchViewBefore(channel, first, n);
-      // first = resp.rows.at(0);
-      // rows = resp.rows.concat(rows);
+      return combined;
+    },
+
+    async prev(n: number) {
+      if (first === undefined) return;
+      const resp = await fetchViewBefore(channel, first, n);
+      first = resp.rows.at(0);
+      rows = resp.rows.concat(rows);
     },
     // this page doesn't have the next command
-    async next () {},
+    async next() {},
   };
 }
 
@@ -84,7 +115,9 @@ export async function getPage(channel: string, timestamp: number, limit: number)
   let first = page.rows.at(0);
   let last = page.rows.at(-1);
   return {
-    get rows() { return rows },
+    get rows() {
+      return rows;
+    },
 
     prev: async (n: number) => {
       if (first === undefined) return;
@@ -104,25 +137,14 @@ export async function getPage(channel: string, timestamp: number, limit: number)
 
 // Given the list of all messages, groupBy the message timestamp, where groups are per-day (YYYY-MM-dd)
 export function groupRows(rows: Readonly<Message[]>): Map<string, MessageView[]> {
-  const m = new Map<string, MessageView[]>();
-  m.set("YYYY-DD-MM",
-    rows.map(msg2View)
-  )
-  return m;
-
   const rows_ = rows.map(msg2View);
-  // return Map.groupBy(rows_, ({date}) => {return date})
-  return rows_.reduce(groupByDate, new Map());
-}
-
-function groupByDate(acc: Map<string, MessageView[]>, msg: MessageView): Map<string, MessageView[]> {
-  // push to Map['date']=[] if it exists, create Map['date']=[msg] if it doesn't
-  acc.get(msg.date)?.push(msg) ?? acc.set(msg.date, [msg]);
-  return acc;
+  return Map.groupBy(rows_, ({ date }) => {
+    return date;
+  });
 }
 
 function datetime(timestamp: number): { date: string; time: string } {
-  // poor mans strftime to ISO 8601
+  // poor-man's strftime to ISO 8601
   const date = new Date(timestamp * 1000);
   const YYYY = date.getFullYear().toString().padStart(4, "0");
   const MM = (date.getMonth() + 1).toString().padStart(2, "0");
@@ -134,15 +156,37 @@ function datetime(timestamp: number): { date: string; time: string } {
 }
 
 function msg2View(msg: Message): MessageView {
+  let html: Node[] = [];
+  if (msg.message) {
+    html = formatMsg(msg.message);
+  } else if (msg.topic) {
+    const el = document.createTextNode(msg.topic);
+    html = [el];
+  }
+
+  const { _id, sender } = msg;
   return {
-    ...msg,
+    _id,
+    sender,
+    html,
     ...datetime(msg.timestamp),
     slug: slugify(Math.trunc(msg.timestamp)),
-    html: formatMsg(msg.message),
   };
 }
 
-// awaitable sleep/setTimeout
-function sleep(ms: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, ms));
+/**
+ * Awaitable sleep based on setTimeout
+ * @param delay miliseconds
+ */
+function sleep(delay: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, delay));
+}
+
+// FIXME:
+// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/groupBy
+// https://github.com/microsoft/TypeScript/pull/56805
+declare global {
+  interface MapConstructor {
+    groupBy<Item, Key>(items: Iterable<Item>, keySelector: (item: Item, index: number) => Key): Map<Key, Item[]>;
+  }
 }

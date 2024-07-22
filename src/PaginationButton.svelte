@@ -1,17 +1,22 @@
 <script lang="ts">
-  export let onClick: (ev: Event) => Promise<void>;
-  let disabled = false;
+  import type { Snippet } from "svelte";
+  import type { EventHandler } from "svelte/elements";
 
-  async function handleClick(ev: Event) {
+  type Props = { onclick: EventHandler; children: Snippet };
+  let { onclick, children, ...attrs }: Props = $props();
+  let disabled = $state<boolean>(false);
+
+  const handleClick: EventHandler = async (ev) => {
+    ev.preventDefault();
     disabled = true;
-    await onClick(ev);
+    await onclick(ev);
     disabled = false;
-  }
+  };
 </script>
 
-<div class={$$props.class}>
-  <button on:click|stopPropagation={handleClick} {disabled} class:disabled>
-    <slot />
+<div {...attrs}>
+  <button onclick={handleClick} {disabled} class:disabled>
+    {@render children()}
   </button>
 </div>
 
