@@ -33,6 +33,11 @@
     "linkifyjs": "^4.1.3",
     "svelte": "5.0.0-next.193"
   },
+  "prettier": {
+    "printWidth": 120,
+    "plugins": ["prettier-plugin-svelte"],
+    "overrides": [{ "files": "*.svelte", "options": { "parser": "svelte" } }]
+  },
   "packageManager": "pnpm@latest",
   "engines": {
     "pnpm": "^9.0.0"
