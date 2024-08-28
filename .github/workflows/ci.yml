@@ -10,9 +10,9 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
 
-    - uses: pnpm/action-setup@v2
+    - uses: pnpm/action-setup@v4
       with:
         run_install: true
 
@@ -26,7 +26,7 @@ jobs:
       run: pnpm build:production
 
     - name: Upload artifact
-      uses: actions/upload-pages-artifact@v1
+      uses: actions/upload-pages-artifact@v3
       with:
         path: ./dist
 
@@ -50,5 +50,5 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-    - uses: actions/deploy-pages@v1
+    - uses: actions/deploy-pages@v4
       id: deployment
