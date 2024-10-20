@@ -1,12 +1,13 @@
 {
   "extends": "@tsconfig/svelte/tsconfig.json",
   "compilerOptions": {
-    "outDir": "_build",
-    "module": "ESNext",
+    "moduleDetection": "force",
+    "target": "ES2023",
     "allowJs": true,
-    // "checkJs": true,
+    "checkJs": true,
     "resolveJsonModule": true,
-    "strict": true
+//    "noUncheckedIndexedAccess": true,
+    "noEmit": true
   },
-  "include": ["src/**/*.ts", "src/**/*.js"],
+  "include": ["src/**/*.ts", "src/**/*.js", "src/**/*.svelte"]
 }
