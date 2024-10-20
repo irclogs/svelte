@@ -3,30 +3,36 @@
  *
  */
 
-export interface Channel {
+import { config } from "./config";
+
+export type Channel = {
   name: string;
   total_messages: number;
-}
-export interface Message {
+};
+
+export type Message = {
   timestamp: number;
   sender: string;
   channel: string;
-  message: string;
+  message?: string;
+  topic?: string;
   _id: string;
-}
-export interface ViewResponse {
+};
+
+export type ViewResponse = {
   channel: string;
   rows: Message[];
   update_seq: string;
   total_rows: number;
   offset: number;
-}
-export interface ChangesResponse {
+};
+
+export type ChangesResponse = {
   results: { doc: Message }[];
   last_seq: string;
-}
+};
 
-const CouchURL = new URL(import.meta.env.VITE_COUCHDB_URL);
+const CouchURL = new URL(config.couchDbUrl);
 
 const commonQueryArgs = {
   include_docs: true,
@@ -114,6 +120,7 @@ function extractChannelData(row: { key: [string]; value: number }): {
   return { name: row.key[0], total_messages: row.value };
 }
 
+// TODO: timeout the request even if the server doesn't break the connection
 export async function fetchChanges(channel: string, since: string, signal?: AbortSignal): Promise<ChangesResponse> {
   const feedUrl = new URL("_changes", CouchURL);
   const query = {
@@ -142,6 +149,27 @@ export async function fetchChanges(channel: string, since: string, signal?: Abor
   return await response.json();
 }
 
+/**
+ * Async generator
+ */
+export async function* genChanges(channel: string, since: string, signal: AbortSignal) {
+  let last_seq = since;
+  while (!signal.aborted) {
+    try {
+      const changes = await fetchChanges(channel, last_seq, signal);
+      if (changes.results.length > 0) {
+        yield changes.results;
+      }
+      last_seq = changes.last_seq;
+    } catch (e: any) {
+      if (signal.aborted) return; // expected exception, quit!
+      // do we need to handle `DOMException: The operation was aborted.` ?
+      console.log("genChanges errored:", e, "… retrying in 15s");
+      await sleep(15_000);
+    }
+  }
+}
+
 async function postQuery(query: any) {
   const url = new URL("_design/log/_view/channel", CouchURL);
   const options: RequestInit = {
@@ -160,4 +188,12 @@ async function postQuery(query: any) {
     throw new Error(`Network response was not ok: ${response.statusText}`);
   }
   return response;
+}
+
+/**
+ * Awaitable sleep based on setTimeout
+ * @param delay miliseconds
+ */
+function sleep(delay: number): Promise<void> {
+  return new Promise((resolve) => setTimeout(resolve, delay));
 }

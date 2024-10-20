@@ -1,38 +1,38 @@
 <script lang="ts">
-  import { replace as redirect_to } from "svelte-spa-router";
-
   import Header from "./Header.svelte";
   import Table from "./ChannelView.svelte";
   import PageLoader from "./spinners/PageLoader.svelte";
   import Button from "./PaginationButton.svelte";
-  import { getPage } from "./libs/couch";
+  import { getPage } from "./libs/couch.svelte";
   import { oportunisticParsePemalink } from "./libs/slugs";
+  import { Router } from "./libs/router.svelte";
+  import { config } from "./libs/config";
 
-  export let params: { channel: string; permalink: string };
-  const pageSize = parseInt(import.meta.env.VITE_IRCLOG_PAGING_SIZE);
+  type Props = { channel: string; permalink: string };
+  let { channel, permalink }: Props = $props();
 
   async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
     if (!timestamp) {
-      redirect_to("/404");
+      Router.go("/404");
       throw Error("invalid permalink, will redirect to 404");
     }
     return await getPage(channel, timestamp, n);
   }
 </script>
 
-<svelte:head><title>irc logs for #{params.channel}</title></svelte:head>
+<svelte:head><title>irc logs for #{channel}</title></svelte:head>
 
 <Header>
-  <a href="#/">irc logs</a> for <a href="#/{params.channel}">#{params.channel}</a>
+  <a href="#/">irc logs</a> for <a href="#/{channel}">#{channel}</a>
 </Header>
 
-{#await load(params.channel, params.permalink, 10)}
+{#await load(channel, permalink, 10)}
   <PageLoader />
 {:then page}
-  <Button onClick={() => page.prev(pageSize)}>back</Button>
-  <Table rows={page} channel={params.channel} />
-  <Button onClick={() => page.next(pageSize)}>forward</Button>
+  <Button onclick={() => page.prev(config.pageSize)}>back</Button>
+  <Table rows={page.rows} {channel} />
+  <Button onclick={() => page.next(config.pageSize)}>forward</Button>
 {:catch error}
   <p>Something went wrong: {error.message}</p>
 {/await}
