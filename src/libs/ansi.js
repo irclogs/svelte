@@ -13,10 +13,18 @@ const RESET = "\x0F";
 
 const HEX_COLOR_LENGTH = 6;
 
+/**
+ * @param {string} ch
+ * @returns boolean
+ */
 function isDigit(ch) {
 	return ch >= "0" && ch <= "9";
 }
 
+/**
+ * @param {string} text
+ * @returns boolean
+ */
 function isHexColor(text) {
 	if (text.length < HEX_COLOR_LENGTH) {
 		return false;
@@ -31,6 +39,10 @@ function isHexColor(text) {
 	return true;
 }
 
+/**
+ * @param {string} text
+ * @returns string
+ */
 export function strip(text) {
 	let out = "";
 	for (let i = 0; i < text.length; i++) {
