@@ -7,7 +7,7 @@ export const slugify = hashids.encode.bind(hashids);
 /*
  * Several types of permalinks are supported, in order of preference:
  *  /#/<channel>/<hashid> - see https://hashids.org/
- *  /#/<channel>/YYYY-MM-DD
+ *  /#/<channel>/YYYY-MM-DD - parsed as YYYY-MM-DDT00:00:00
  *  /#/<channel>/YYYY-MM-DDTHH:MM:SS
  *
  * Try to parse the timestamp, first to succeed wins.
@@ -17,18 +17,19 @@ export const slugify = hashids.encode.bind(hashids);
 export function oportunisticParsePemalink(permalink: string): number | null {
   // try hashids first
   try {
-    let t = hashids.decode(permalink);
+    const t = hashids.decode(permalink);
     if (t.length > 0) return t[0] as number;
   } catch {} // noop - obviously not a hashid
 
-  // try a Date second, for ex. '2020-02-03'
-  // since for this permalink makes the most sense for the users local timezone,
-  // add the 0th hour to the string, otherwise it would be parsed as UTC timezone
-  let date = Date.parse(permalink + "T00:00:00");
+  // next, assume it's a Date, for ex. '2020-02-03'
+  // a string like that is parsed as UTC, so we add "T00:00:00" to it
+  // assuming the user wanted the begining of the day in their local timezone
+  const date = Date.parse(permalink + "T00:00:00");
   if (!Number.isNaN(date)) return date / 1000;
 
-  // if all failed, it might be just a timestamp or full DateTime
-  let datetime = Date.parse(permalink);
+  // if that failed, then it might be some dateString
+  // see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
+  const datetime = Date.parse(permalink);
   if (!Number.isNaN(datetime)) return datetime / 1000;
 
   console.warn("permalink couldn't be parsed:", permalink);
