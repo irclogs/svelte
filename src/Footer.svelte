@@ -1,12 +1,12 @@
 <script>
-  import { version } from "../package.json";
-  let online;
+  import { config } from "./libs/config";
+  let online = $state(true);
 </script>
 
 <svelte:window bind:online />
 <footer class:offline={!online}>
-  <a href="https://irc.softver.org.mk/">irclog home page</a> | ver:
-  <abbr title={import.meta.env.VITE_GITHUB_ARCHIVE_URL}>{version}</abbr>
+  <a href={config.homePage}>irclog home page</a> | ver:
+  <abbr title={config.githubArchive}>{config.version}</abbr>
 </footer>
 
 <style>
