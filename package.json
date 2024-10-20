@@ -16,7 +16,6 @@
     "prettier:check": "prettier --check src/",
     "prettier:fix": "prettier --write src/"
   },
-  "browserslist": "> 0.25%, not dead",
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^4.0.0",
     "@tsconfig/svelte": "^5.0.4",
