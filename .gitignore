@@ -3,3 +3,5 @@ _build/
 node_modules
 dist/
 package-lock.json
+.env.local
+.env.*.local
