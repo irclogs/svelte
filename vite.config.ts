@@ -16,8 +16,19 @@ const svelteConfig = {
 /*
  * https://vitejs.dev/config/
  */
-export default defineConfig({
-  server: { port: parseInt(process.env.npm_package_config_port) },
-  build: { sourcemap: true },
-  plugins: [svelte(svelteConfig)],
+export default defineConfig(({mode}) => {
+  return {
+    server: { port: parseInt(process.env.npm_package_config_port) },
+    build: { sourcemap: true },
+    plugins: [svelte(svelteConfig)],
+    define: {
+      "__APP_RELEASE_VERSION__": JSON.stringify(version()),
+    }
+  }
 });
+
+function version() {
+  const t = new Date();
+  const date = t.toISOString().split('T')[0]; // YYYY-MM-DD
+  return `v${date}`;
+}

@@ -10,9 +10,10 @@
  *
  * see https://vitejs.dev/guide/env-and-mode
  */
+declare const __APP_RELEASE_VERSION__: string;
 
 export const config = {
-  version: import.meta.env.VITE_RELEASE_VERSION ?? "local-dev",
+  version: __APP_RELEASE_VERSION__ ?? "local-dev",
   githubArchive: import.meta.env.VITE_GITHUB_ARCHIVE_URL ?? "local-dev",
   homePage: import.meta.env.BASE_URL, // "https://irc.softver.org.mk/",
   indexPageSize: toInt(import.meta.env.VITE_IRCLOG_INDEX_PAGE_SIZE, 100),
