@@ -37,15 +37,15 @@
     border: 1px solid #8181a8;
     border-radius: 6px;
     outline: none;
-  }
-  button:hover {
-    color: #555;
-    background-color: #e0e0e0;
-  }
-  button.disabled {
-    color: #555;
-    background-color: #e0e0e0;
-    animation: glowing 5000ms infinite;
+    &:hover {
+      color: #555;
+      background-color: #e0e0e0;
+    }
+    &.disabled {
+      color: #555;
+      background-color: #e0e0e0;
+      animation: glowing 5000ms infinite;
+    }
   }
 
   @keyframes glowing {

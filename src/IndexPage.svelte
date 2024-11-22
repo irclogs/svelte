@@ -1,6 +1,6 @@
 <script lang="ts">
-  import Header from "./Header.svelte";
-  import PageLoader from "./spinners/PageLoader.svelte";
+  import Header from "./components/Header.svelte";
+  import PageLoader from "./components/PageLoader.svelte";
   import { fetchChannelList } from "./libs/couch-api";
 </script>
 

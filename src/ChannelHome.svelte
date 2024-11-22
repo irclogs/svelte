@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Header from "./Header.svelte";
+  import Button from "./components/PaginationButton.svelte";
+  import Header from "./components/Header.svelte";
+  import PageLoader from "./components/PageLoader.svelte";
   import Table from "./ChannelView.svelte";
-  import PageLoader from "./spinners/PageLoader.svelte";
-  import Button from "./PaginationButton.svelte";
   import { getLatest } from "./libs/couch.svelte";
   import { config } from "./libs/config";
 
