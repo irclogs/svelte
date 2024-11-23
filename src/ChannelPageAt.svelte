@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Header from "./Header.svelte";
+  import Button from "./components/PaginationButton.svelte";
+  import Header from "./components/Header.svelte";
+  import PageLoader from "./components/PageLoader.svelte";
   import Table from "./ChannelView.svelte";
-  import PageLoader from "./spinners/PageLoader.svelte";
-  import Button from "./PaginationButton.svelte";
   import { getPage } from "./libs/couch.svelte";
   import { oportunisticParsePemalink } from "./libs/slugs";
   import { Router } from "./libs/router.svelte";

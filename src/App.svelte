@@ -2,9 +2,9 @@
   import IndexPage from "./IndexPage.svelte";
   import ChannelHome from "./ChannelHome.svelte";
   import ChannelPageAt from "./ChannelPageAt.svelte";
-  import Footer from "./Footer.svelte";
-  import GithubBadge from "./GithubBadge.svelte";
-  import NotFound from "./NotFound.svelte";
+  import Footer from "./components/Footer.svelte";
+  import GithubBadge from "./components/GithubBadge.svelte";
+  import NotFound from "./components/NotFound.svelte";
 
   import { Router } from "./libs/router.svelte";
 </script>
