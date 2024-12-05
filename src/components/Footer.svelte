@@ -10,8 +10,8 @@
   <a href={config.homePage}>irclog home page</a> | ver:
   <button title="Build Info" onclick={() => popover.showPopover()}>{config.version}</button>
   <div id="build-info" popover="auto" bind:this={popover}>
-    Artefact: {config.githubArchive}<br />
-    Project: {config.projectUrl}
+    Artefact: <a href={config.githubArchive}>{config.githubArchive}</a><br />
+    Project: <a href={config.projectUrl}>{config.projectUrl}</a>
   </div>
 </footer>
 
@@ -47,7 +47,7 @@
     bottom: anchor(--build-info-btn top);
     left: anchor(--build-info-btn left);
     top: unset;
-    margin: 0;
+    margin: 0 0 2em 5em;
     border-width: 1px;
   }
 
