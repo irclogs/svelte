@@ -173,20 +173,3 @@ function msg2View(msg: Message): MessageView {
     slug: slugify(Math.trunc(msg.timestamp)),
   };
 }
-
-/**
- * Awaitable sleep based on setTimeout
- * @param delay miliseconds
- */
-function sleep(delay: number): Promise<void> {
-  return new Promise((resolve) => setTimeout(resolve, delay));
-}
-
-// FIXME:
-// https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Map/groupBy
-// https://github.com/microsoft/TypeScript/pull/56805
-declare global {
-  interface MapConstructor {
-    groupBy<Item, Key>(items: Iterable<Item>, keySelector: (item: Item, index: number) => Key): Map<Key, Item[]>;
-  }
-}

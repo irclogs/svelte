@@ -3,6 +3,8 @@
   "compilerOptions": {
     "moduleDetection": "force",
     "target": "ES2023",
+    "lib": ["ES2024", "DOM"],
+    "strict": true,
     "allowJs": true,
     "checkJs": true,
     "resolveJsonModule": true,
