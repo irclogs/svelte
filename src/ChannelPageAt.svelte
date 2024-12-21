@@ -3,10 +3,11 @@
   import Header from "./components/Header.svelte";
   import PageLoader from "./components/PageLoader.svelte";
   import Table from "./ChannelView.svelte";
+
+  import { config } from "./libs/config";
   import { getPage } from "./libs/couch.svelte";
   import { oportunisticParsePemalink } from "./libs/slugs";
-  import { Router } from "./libs/router.svelte";
-  import { config } from "./libs/config";
+  import { router } from "./libs/router";
 
   type Props = { channel: string; permalink: string };
   let { channel, permalink }: Props = $props();
@@ -14,7 +15,7 @@
   async function load(channel: string, permalink: string, n: number) {
     let timestamp = oportunisticParsePemalink(permalink);
     if (!timestamp) {
-      Router.go("/404");
+      router.go("/404");
       throw Error("invalid permalink, will redirect to 404");
     }
     return await getPage(channel, timestamp, n);

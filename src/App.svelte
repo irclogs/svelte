@@ -6,18 +6,18 @@
   import GithubBadge from "./components/GithubBadge.svelte";
   import NotFound from "./components/NotFound.svelte";
 
-  import { Router } from "./libs/router.svelte";
+  import { router } from "./libs/router";
 </script>
 
 <main>
-  {#if Router.hash == "/"}
+  {#if router.hash == "/"}
     <IndexPage />
-  {:else if Router.hash == "/404"}
+  {:else if router.hash == "/404"}
     <NotFound />
-  {:else if Router.hash.match(/^\/[^/]+$/)}
-    <ChannelHome channel={Router.hash.slice(1)} />
-  {:else if Router.hash.match(/^\/[^/]+\/[^/]+$/)}
-    {@const [_, channel, permalink] = Router.hash.split("/")}
+  {:else if router.hash.match(/^\/[^/]+$/)}
+    <ChannelHome channel={router.hash.slice(1)} />
+  {:else if router.hash.match(/^\/[^/]+\/[^/]+$/)}
+    {@const [_, channel, permalink] = router.hash.split("/")}
     <ChannelPageAt {channel} {permalink} />
   {:else}
     <NotFound />

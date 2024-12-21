@@ -17,20 +17,20 @@
     "prettier:fix": "prettier --write src/"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^5.0.1",
+    "@sveltejs/vite-plugin-svelte": "^5.0.3",
     "@tsconfig/svelte": "^5.0.4",
-    "@types/node": "^22.10.1",
+    "@types/node": "^22.10.2",
     "prettier": "^3.4.2",
     "prettier-plugin-svelte": "^3.3.2",
     "svelte-check": "^4.1.1",
     "tslib": "^2.8.1",
     "typescript": "^5.7.2",
-    "vite": "^6.0.2"
+    "vite": "^6.0.5"
   },
   "dependencies": {
     "hashids": "^2.3.0",
     "linkifyjs": "^4.2.0",
-    "svelte": "^5.6.2"
+    "svelte": "^5.15.0"
   },
   "prettier": {
     "printWidth": 120,
