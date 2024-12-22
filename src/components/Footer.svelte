@@ -1,12 +1,10 @@
 <script lang="ts">
+  import { online } from "svelte/reactivity/window";
   import { config } from "../libs/config";
-  let online = $state(true);
   let popover: HTMLElement;
 </script>
 
-<svelte:window bind:online />
-
-<footer class:offline={!online}>
+<footer class:offline={!online.current}>
   <a href={config.homePage}>irclog home page</a> | ver:
   <button title="Build Info" onclick={() => popover.showPopover()}>{config.version}</button>
   <div id="build-info" popover="auto" bind:this={popover}>
