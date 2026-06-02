@@ -13,8 +13,8 @@
     "build:production": "vite build --mode production",
     "dev": "vite",
     "preview": "vite preview",
-    "prettier:check": "prettier --check src/",
-    "prettier:fix": "prettier --write src/"
+    "fmt:check": "prettier --check src/",
+    "fmt:fix": "prettier --write src/"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",

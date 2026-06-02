@@ -16,7 +16,7 @@ jobs:
       with:
         run_install: true
 
-    - run: pnpm prettier:check
+    - run: pnpm fmt:check
     - run: pnpm svelte-check
     - run: pnpm tsc
 
