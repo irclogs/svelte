@@ -30,7 +30,7 @@
   "dependencies": {
     "hashids": "^2.3.0",
     "linkifyjs": "^4.3.3",
-    "svelte": "^5.56.1"
+    "svelte": "^5.56.4"
   },
   "prettier": {
     "printWidth": 120,
