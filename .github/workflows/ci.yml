@@ -16,8 +16,8 @@ jobs:
     - run: nub install
 
     - run: nub run fmt:check
-    - run: nub run svelte-check
-    - run: nub run tsc
+    - run: nub run svelte:check
+    - run: nub run compile
 
     - name: build production deploy artifacts
       env:

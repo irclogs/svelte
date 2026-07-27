@@ -8,13 +8,15 @@
     "port": "8000"
   },
   "scripts": {
+    "compile": "tsc --pretty",
     "check:all": "oxfmt --check src/ && svelte-check && tsc --noEmit",
     "build": "vite build",
     "build:production": "vite build --mode production",
     "dev": "vite",
     "preview": "vite preview",
     "fmt:check": "oxfmt --check src/",
-    "fmt:fix": "oxfmt --write src/"
+    "fmt:fix": "oxfmt --write src/",
+    "svelte:check": "svelte-check"
   },
   "devDependencies": {
     "@sveltejs/vite-plugin-svelte": "^7.1.2",
