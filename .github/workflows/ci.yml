@@ -12,18 +12,17 @@ jobs:
     steps:
     - uses: actions/checkout@v7
 
-    - uses: pnpm/action-setup@v6
-      with:
-        run_install: true
+    - uses: nubjs/setup-nub@v0
+    - run: nub install
 
-    - run: pnpm fmt:check
-    - run: pnpm svelte:check
-    - run: pnpm compile
+    - run: nub run fmt:check
+    - run: nub run svelte:check
+    - run: nub run compile
 
     - name: build production deploy artifacts
       env:
         VITE_GITHUB_ARCHIVE_URL: ${{ github.server_url }}/${{ github.repository }}/archive/${{ github.sha }}.zip
-      run: pnpm build:production
+      run: nub run build:production
 
     - name: Upload artifact
       uses: actions/upload-pages-artifact@v5
