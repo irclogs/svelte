@@ -17,7 +17,7 @@
     "fmt:fix": "prettier --write src/"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^7.1.2",
+    "@sveltejs/vite-plugin-svelte": "^7.2.0",
     "@tsconfig/svelte": "^5.0.8",
     "@types/node": "^26.1.0",
     "prettier": "^3.9.4",
