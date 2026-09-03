@@ -1,5 +1,5 @@
 <script lang="ts">
-  let visible = false;
+  let visible = $state(false);
   function showPopup() {
     visible = true;
     document.addEventListener("keydown", handleModalKeydown);
@@ -57,7 +57,7 @@
       <h2>Search:</h2>
       <input />
       <p>Some text in the Modal..</p>
-      <span aria-label="Close" role="button" tabindex="0" on:click={hidePopup} on:keydown={handleCloseKeydown}
+      <span aria-label="Close" role="button" tabindex="0" onclick={hidePopup} onkeydown={handleCloseKeydown}
         >&times;</span
       >
     </div>
