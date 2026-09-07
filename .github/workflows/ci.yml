@@ -13,6 +13,9 @@ jobs:
     - uses: actions/checkout@v7
 
     - uses: nubjs/setup-nub@v0
+      with:
+        package-manager-cache: false
+
     - run: nub install
 
     - run: nub run fmt:check
