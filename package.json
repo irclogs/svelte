@@ -19,7 +19,7 @@
     "svelte:check": "svelte-check"
   },
   "devDependencies": {
-    "@sveltejs/vite-plugin-svelte": "^7.3.0",
+    "@sveltejs/vite-plugin-svelte": "^7.3.1",
     "@tsconfig/svelte": "^5.0.8",
     "@types/node": "^26.4.1",
     "oxfmt": "^0.61.0",
